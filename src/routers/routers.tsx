@@ -3,10 +3,11 @@ import PrivateRouters from './private.routers'
 import AdminLayout from '@/pages/AdminLayout'
 import Dashboard from '@/pages/dashboard/dashboard'
 import Users from '@/pages/users/users'
-import Products from '@/pages/products/products'
 import Variants from '@/pages/variants/variants'
 import Discounts from '@/pages/discounts/discounts'
 import Categories from '@/pages/categories/categories'
+import AddCategory from '@/pages/categories/addCategory'
+import EditCategory from '@/pages/categories/editCategory'
 import Orders from '@/pages/orders/orders'
 import Coupons from '@/pages/coupons/coupons'
 import Reviews from '@/pages/reviews/reviews'
@@ -38,6 +39,8 @@ const Routers = () => {
           <Route path='/discounts/add' element={<DiscountsAdd />} />
           <Route path='/discounts/update/1' element={<DiscountsUpdate />} />
           <Route path='/categories' element={<Categories />} />
+          <Route path='/categories/add' element={<AddCategory />} />
+          <Route path='/categories/edit/:id' element={<EditCategory />} />         
           <Route path='/orders' element={<Orders />} />
           <Route path='/coupons' element={<Coupons />} />
           <Route path='/reviews' element={<Reviews />} />
