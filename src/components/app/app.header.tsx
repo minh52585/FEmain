@@ -21,7 +21,7 @@ const items: MenuProps['items'] = [
   {
     key: '2',
     label: (
-      <Link rel="noopener noreferrer" to="/">
+      <Link rel="noopener noreferrer" to="/register">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <LogoutOutlined />
           Đăng xuất
