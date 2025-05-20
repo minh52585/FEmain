@@ -12,6 +12,13 @@ import Coupons from '@/pages/coupons/coupons'
 import Reviews from '@/pages/reviews/reviews'
 import NotFound from '@/pages/NotFound'
 import Analytics from '@/pages/analytics/analytics'
+import Register from '@/pages/register/register'
+import Login from '@/pages/login/login'
+import ProductsAdd from '@/pages/products/products.add.pages'
+import ProductsPage from '@/pages/products/products'
+import ProductsUpdate from '@/pages/products/products.update.pages'
+import DiscountsAdd from '@/pages/discounts/discounts.add.pages'
+import DiscountsUpdate from '@/pages/discounts/discounts.update.pages'
 
 const Routers = () => {
   const isAuthenticated = true
@@ -23,15 +30,21 @@ const Routers = () => {
           <Route index element={<Dashboard />} />
           <Route path='/analytics' element={<Analytics />} />
           <Route path='/users' element={<Users />} />
-          <Route path='/products' element={<Products />} />
+          <Route path='/products/add' element={<ProductsAdd />} />
+          <Route path='/products' element={<ProductsPage />} />
+          <Route path='/products/update/1' element={<ProductsUpdate />} />
           <Route path='/variants' element={<Variants />} />
           <Route path='/discounts' element={<Discounts />} />
+          <Route path='/discounts/add' element={<DiscountsAdd />} />
+          <Route path='/discounts/update/1' element={<DiscountsUpdate />} />
           <Route path='/categories' element={<Categories />} />
           <Route path='/orders' element={<Orders />} />
           <Route path='/coupons' element={<Coupons />} />
           <Route path='/reviews' element={<Reviews />} />
         </Route>
       </Route>
+      <Route path='/register' element={<Register />} />
+      <Route path='/login' element={<Login />} />
       <Route path='*' element={<NotFound />} />
     </Routes>
   )
