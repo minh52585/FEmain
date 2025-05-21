@@ -1,4 +1,5 @@
-import { Table } from "antd";
+import { Switch, Table } from "antd";
+import { useState } from "react";
 
 const data = [
   {
@@ -10,7 +11,7 @@ const data = [
     avatar_url: "https://i.pravatar.cc/100",
     phone: "0977 907 877",
     address: "Hà Nội",
-    status: "ON",
+    status: true,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
@@ -23,7 +24,7 @@ const data = [
     avatar_url: "https://i.pravatar.cc/200",
     phone: "0335 879 630",
     address: "TP Hồ Chí Minh",
-    status: "ON",
+    status: true,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
@@ -36,7 +37,7 @@ const data = [
     avatar_url: "https://i.pravatar.cc/300",
     phone: "0988 909 765",
     address: "Đà Nẵng",
-    status: "OFF",
+    status: false,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
@@ -49,13 +50,25 @@ const data = [
     avatar_url: "https://i.pravatar.cc/400",
     phone: "0788 808 158",
     address: "Quảng Ninh",
-    status: "ON",
+    status: false,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
 ];
 
-const columns = [
+const Users = () => {
+  const [userData, setUserData] = useState(data);
+
+  const toggleStatus = (id: number) => {
+    const updatedData = userData.map((user) =>
+      user.id === id
+        ? { ...user, status: user.status === true ? false : true }
+        : user
+    );
+    setUserData(updatedData);
+  };
+  
+  const columns = [
   {
     title: "ID",
     dataIndex: "id",
@@ -101,29 +114,36 @@ const columns = [
     title: "Trạng thái",
     dataIndex: "status",
     key: "status",
-    render: (status: string) => {
-      const isActive = status === "ON";
-      const backgroundColor = isActive ? "#e6ffe6" : "#ffe6e6";
-      const textColor = isActive ? "limegreen" : "tomato";
-      return (
-        <span style={{ backgroundColor, color: textColor, fontWeight: 600, padding: "3px 6px", borderRadius: "17px", display: "inline-block" }}>
-          {status}
-        </span>
-      )
-    }
+    render: (status: string) => (
+      <span style={{
+        backgroundColor: status ? "#e6ffe6" : "#ffe6e6",
+        color: status ? "limegreen" : "tomato",
+        fontWeight: 600,
+        padding: "3px 6px",
+        borderRadius: "17px",
+        display: "inline-block"
+      }}>
+        {status ? "ON" : "OFF"}
+      </span>
+    )
   },
   {
     title: "Hành động",
     dataIndex: "action",
-
+    render: (_: any, record: { id: number; status: boolean }) => (
+      <Switch 
+        checked={record.status}
+        onChange={() => toggleStatus(record.id)}
+        style={{ minWidth: 30 }}
+      />
+    )
   },
 ]
 
-const Users = () => {
   return (
     <>
       <h1 style={{ marginBottom: 24 }}>Danh sách khách hàng</h1>
-      <Table columns={columns} dataSource={data} rowKey="id" pagination={{pageSize: 4}}/>
+      <Table columns={columns} dataSource={userData} rowKey="id" pagination={{pageSize: 4}}/>
     </>
   )
 }
