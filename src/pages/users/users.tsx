@@ -4,66 +4,54 @@ import { useState } from "react";
 const data = [
   {
     id: 1,
-    usersName: "nminh",
-    fullName: "Nhật Minh",
-    email: "nminh@gmail.com",
-    gender: "Nam",
+    usersName: "pquynh",
+    fullName: "Phạm Quỳnh",
+    email: "pquynh@gmail.com",
+    gender: "Nữ",
     avatar_url: "https://i.pravatar.cc/100",
     phone: "0977 907 877",
     address: "Hà Nội",
+    role_id: "Admin",
     status: true,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
   {
     id: 2,
-    usersName: "vhduy",
-    fullName: "Hữu Duy",
-    email: "vhduy@gmail.com",
-    gender: "Nam",
+    usersName: "nminh",
+    fullName: "Ngọc Minh",
+    email: "nminh@gmail.com",
+    gender: "Nữ",
     avatar_url: "https://i.pravatar.cc/200",
     phone: "0335 879 630",
-    address: "TP Hồ Chí Minh",
+    address: "Sơn La",
+    role_id: "User",
     status: true,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
   {
     id: 3,
-    usersName: "tampv",
-    fullName: "Văn Tam",
-    email: "tamka@gmail.com",
-    gender: "Nữ",
+    usersName: "nduong",
+    fullName: "Nguyễn Dương",
+    email: "nduong@gmail.com",
+    gender: "Nam",
     avatar_url: "https://i.pravatar.cc/300",
     phone: "0988 909 765",
-    address: "Đà Nẵng",
+    address: "Cà Mau",
+    role_id: "User",
     status: false,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
-  },
-  {
-    id: 4,
-    usersName: "quocanh",
-    fullName: "Quốc Anh",
-    email: "vqa@gmail.com",
-    gender: "Nữ",
-    avatar_url: "https://i.pravatar.cc/400",
-    phone: "0788 808 158",
-    address: "Quảng Ninh",
-    status: false,
-    created_at: "2025-05-19T00:00:00Z",
-    update_at: "2025-05-19T00:00:00Z",
-  },
+  }
 ];
 
 const Users = () => {
   const [userData, setUserData] = useState(data);
 
   const toggleStatus = (id: number) => {
-    const updatedData = userData.map((user) =>
-      user.id === id
-        ? { ...user, status: user.status === true ? false : true }
-        : user
+    const updatedData = userData.map(user =>
+      user.id === id ? { ...user, status: !user.status } : user
     );
     setUserData(updatedData);
   };
@@ -111,10 +99,15 @@ const Users = () => {
     key: "address"
   },
   {
+    title: "Vai trò",
+    dataIndex: "role_id",
+    key: "role_id"
+  },
+  {
     title: "Trạng thái",
     dataIndex: "status",
     key: "status",
-    render: (status: string) => (
+    render: (status: boolean) => (
       <span style={{
         backgroundColor: status ? "#e6ffe6" : "#ffe6e6",
         color: status ? "limegreen" : "tomato",
