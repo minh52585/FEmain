@@ -1,35 +1,46 @@
-import { Button, Popconfirm, Switch, Table } from 'antd'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, message, Popconfirm, Switch, Table } from 'antd'
 import { Link } from 'react-router'
+import { IProducts } from '../../types/product.ts'
+import axios from 'axios'
 
 const ProductsPage = () => {
-  const dataSource = [
-    {
-      _id: '1',
-      name: 'Mike',
-      descriptions: '10 Downing Street',
-      price: 32,
-      quantity: 32,
-      category: 'New York No. 1 Lake Park',
-      upload: '10 Downing Street',
-      status: true
-    },
-    {
-      _id: '2',
-      name: 'Mike',
-      descriptions: '10 Downing Street',
-      price: 32,
-      quantity: 32,
-      category: 'New York No. 1 Lake Park',
-      upload: '10 Downing Street',
-      status: false
+  const { data } = useQuery<IProducts[]>({
+    queryKey: ['products'],
+    queryFn: async () => {
+      try {
+        const { data } = await axios.get('http://localhost:8888/api/products')
+        console.log('Data:', data)
+        return Array.isArray(data.data) ? data.data : [data.data]
+      } catch (error) {
+        console.log(error)
+        return []
+      }
     }
-  ]
+  })
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        await axios.delete(`http://localhost:8888/api/products/${id}`)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      message.success('Delete product successfully')
+    }
+  })
+  const DelProduct = (id: string) => {
+    mutation.mutate(id)
+  }
 
   const columns = [
     {
       title: '#',
       key: 'id',
-      render:(_:any, __:any, index:number) => index + 1
+      render: (_: any, __: any, index: number) => index + 1
     },
     {
       title: 'Name',
@@ -37,60 +48,72 @@ const ProductsPage = () => {
       key: 'name'
     },
     {
-      title: 'descriptions',
-      dataIndex: 'descriptions',
-      key: 'descriptions'
+      title: 'Description',
+      key: 'description',
+      render: (record: any) => record.description || record.descriptions || ''
     },
     {
-      title: 'price',
+      title: 'Price',
       dataIndex: 'price',
       key: 'price'
     },
     {
-      title: 'quantity',
+      title: 'Quantity',
       dataIndex: 'quantity',
       key: 'quantity'
     },
     {
-      title: 'category',
+      title: 'Category',
       dataIndex: 'category',
       key: 'category'
     },
     {
-      title: 'upload',
-      dataIndex: 'upload',
-      key: 'upload',
-      render:(Image:any) => <img src={Image} alt="Image" style={{ width:100, height:100 }} />
+      title: 'Images',
+      dataIndex: 'images',
+      key: 'images',
+      render: (images: string) => <img src={images} width={90} />,
     },
     {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      render: (status: boolean) => (
+      render: (status: string, record: IProducts) => (
         <Switch
-          checked={status}
-          checkedChildren="Con hang"
+          checked={status === 'Còn hàng'}
+          checkedChildren="Còn hàng"
           unCheckedChildren="Hết hàng"
           style={{ minWidth: 100 }}
+          onChange={async (checked) => {
+            try {
+              await axios.put(`http://localhost:8888/api/products/${record._id}`, {
+                status: checked ? 'Còn hàng' : 'Hết hàng'
+              })
+              message.success('Cập nhật trạng thái thành công');
+              queryClient.invalidateQueries({ queryKey: ['products'] });
+            } catch (error) {
+              console.log(error)
+              message.error('Cập nhật trạng thái thất bại');
+            }
+          }}
         />
       )
     },
     {
-      title: 'action',
-      dataIndex: 'id',
-      key: 'id',
-      render:() =>
+      title: 'Action',
+      key: 'action',
+      render: (_: any, record: IProducts) =>
         <>
           <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this task?"
+            title="Delete the product"
+            description="Are you sure to delete this product?"
             okText="Yes"
             cancelText="No"
+            onConfirm={() => DelProduct(record._id)}
           >
             <Button danger>Delete</Button>
           </Popconfirm>
-          <Link to={'/products/update/1'}>
-            <Button type='primary'>Edit</Button>
+          <Link to={`/products/update/${record._id}`}>
+            <Button type='primary' style={{ marginLeft: 8 }}>Edit</Button>
           </Link>
         </>
     }
@@ -98,11 +121,15 @@ const ProductsPage = () => {
   return (
     <div>
       <Link to={'/products/add'}>
-        <div style={{ marginBottom:'20px' }}>
-          <Button type='primary'>Them</Button>
+        <div style={{ marginBottom: '20px' }}>
+          <Button type='primary'>Thêm</Button>
         </div>
       </Link>
-      <Table dataSource={dataSource} columns={columns} rowKey={(data) => data._id} />;
+      <Table
+        dataSource={Array.isArray(data) ? data : []}
+        columns={columns}
+        rowKey={record => record._id}
+      />
     </div>
   )
 }

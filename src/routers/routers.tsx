@@ -3,7 +3,6 @@ import PrivateRouters from './private.routers'
 import AdminLayout from '@/pages/AdminLayout'
 import Dashboard from '@/pages/dashboard/dashboard'
 import Users from '@/pages/users/users'
-import Products from '@/pages/products/products'
 import Variants from '@/pages/variants/variants'
 import Discounts from '@/pages/discounts/discounts'
 import Categories from '@/pages/categories/categories'
@@ -32,7 +31,7 @@ const Routers = () => {
           <Route path='/users' element={<Users />} />
           <Route path='/products/add' element={<ProductsAdd />} />
           <Route path='/products' element={<ProductsPage />} />
-          <Route path='/products/update/1' element={<ProductsUpdate />} />
+          <Route path='/products/update/:id' element={<ProductsUpdate />} />
           <Route path='/variants' element={<Variants />} />
           <Route path='/discounts' element={<Discounts />} />
           <Route path='/discounts/add' element={<DiscountsAdd />} />
