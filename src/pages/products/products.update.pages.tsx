@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { IProducts } from '../../types/product'
 import { useQuery } from '@tanstack/react-query'
+import instance from '@/config/axios.customize'
+import api from '@/config/axios.customize'
 
 const ProductsUpdate = () => {
   const formItemLayout = {
@@ -24,7 +26,7 @@ const ProductsUpdate = () => {
     queryKey: ['products', id],
     queryFn: async () => {
       try {
-        const { data } = await axios.get(`http://localhost:8888/api/products/${id}`)
+        const { data } = await api.get(`api/products/${id}`)
         console.log('Data:', data)
         return Array.isArray(data.data) ? data.data : [data.data]
       } catch (error) {
@@ -69,7 +71,7 @@ const ProductsUpdate = () => {
 
   const onFinish = async (values: IProducts) => {
     try {
-      await axios.put(`http://localhost:8888/api/products/${id}`, values)
+      await api.put(`api/products/${id}`, values)
       message.success('Update product successfully')
       nav('/products')
     } catch (err) {
@@ -137,8 +139,8 @@ const ProductsUpdate = () => {
           </Form.Item>
           <Form.Item label="Select" name='status' >
             <Select>
-              <Select.Option value="Còn hàng">Con hang</Select.Option>
-              <Select.Option value="Hết hàng">Het hang</Select.Option>
+              <Select.Option value="Còn hàng">Còn hàng</Select.Option>
+              <Select.Option value="Hết hàng">Hết hàng</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label={null}>

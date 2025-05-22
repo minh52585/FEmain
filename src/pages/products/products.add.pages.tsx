@@ -10,6 +10,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { IProducts } from '../../types/product'
+import api from '@/config/axios.customize'
 
 const ProductsAdd = () => {
   const formItemLayout = {
@@ -26,7 +27,7 @@ const ProductsAdd = () => {
 
   const onFinish = async (values: IProducts) => {
     try {
-      await axios.post('http://localhost:8888/api/products/add', values)
+      await api.post('api/products/add', values)
       message.success('Add product successfully')
       nav('/products')
     } catch (err) {
@@ -113,8 +114,8 @@ const ProductsAdd = () => {
           </Form.Item>
           <Form.Item label="Select" name='status' >
             <Select>
-              <Select.Option value="Còn hàng">Con hang</Select.Option>
-              <Select.Option value="Hết hàng">Het hang</Select.Option>
+              <Select.Option value="Còn hàng">Còn hàng</Select.Option>
+              <Select.Option value="Hết hàng">Hết hàng</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label={null}>

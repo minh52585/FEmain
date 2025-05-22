@@ -6,8 +6,9 @@ import {
   message
 } from 'antd'
 import { ILogin} from '@/types/auth'
-import axios from 'axios'
 import { useNavigate } from 'react-router'
+import instance from '@/config/axios.customize'
+import api from '@/config/axios.customize'
 const Login = () => {
   const nav = useNavigate()
   const [form] = Form.useForm()
@@ -35,7 +36,7 @@ const Login = () => {
   }
   const onFinish = async (values: ILogin) => {
     try {
-      await axios.post('http://localhost:8888/api/login', values)
+      await api.post('api/login', values)
       message.success('Login success')
       const userData = {
         ...values,
@@ -47,7 +48,7 @@ const Login = () => {
     } catch (error:any) {
       if (error.response && error.response.data && error.response.data.message) {
         message.error(error.response.data.message)
-        console.log('Lỗi đăng ký:', error.response.data.message)
+        console.log('Lỗi đăng nhập:', error.response.data.message)
       } else {
         message.error('Register failed')
         console.log(error)

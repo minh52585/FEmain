@@ -7,8 +7,9 @@ import {
   Select
 } from 'antd'
 import { IRegister } from '@/types/auth'
-import axios from 'axios'
 import { useNavigate } from 'react-router';
+import instance from '@/config/axios.customize';
+import api from '@/config/axios.customize';
 const Register = () => {
   const nav = useNavigate()
   const [form] = Form.useForm()
@@ -38,7 +39,7 @@ const Register = () => {
   }
   const onFinish = async (values: IRegister) => {
     try {
-      await axios.post('http://localhost:8888/api/register', values)
+      await api.post('api/register', values)
       message.success('Register success')
       const userData = {
         ...values,

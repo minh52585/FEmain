@@ -3,13 +3,14 @@ import { Button, message, Popconfirm, Switch, Table } from 'antd'
 import { Link } from 'react-router'
 import { IProducts } from '../../types/product.ts'
 import axios from 'axios'
+import api from '@/config/axios.customize.ts'
 
 const ProductsPage = () => {
   const { data } = useQuery<IProducts[]>({
     queryKey: ['products'],
     queryFn: async () => {
       try {
-        const { data } = await axios.get('http://localhost:8888/api/products')
+        const { data } = await api.get('api/products')
         console.log('Data:', data)
         return Array.isArray(data.data) ? data.data : [data.data]
       } catch (error) {
@@ -22,7 +23,7 @@ const ProductsPage = () => {
   const mutation = useMutation({
     mutationFn: async (id: string) => {
       try {
-        await axios.delete(`http://localhost:8888/api/products/${id}`)
+        await api.delete(`api/products/${id}`)
       } catch (error) {
         console.log(error)
       }
@@ -85,7 +86,7 @@ const ProductsPage = () => {
           style={{ minWidth: 100 }}
           onChange={async (checked) => {
             try {
-              await axios.put(`http://localhost:8888/api/products/${record._id}`, {
+              await api.put(`api/products/${record._id}`, {
                 status: checked ? 'Còn hàng' : 'Hết hàng'
               })
               message.success('Cập nhật trạng thái thành công');
