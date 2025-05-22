@@ -1,30 +1,39 @@
-import { Button, Popconfirm, Switch, Table } from 'antd'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button, message, Popconfirm, Switch, Table } from 'antd'
 import { Link } from 'react-router'
+import { IDiscounts } from '../../types/discounts.ts'
+import api from '@/config/axios.customize.ts'
 
 const Discounts = () => {
-
-  const dataSource = [
-    {
-      _id: '1',
-      products: 'Mike',
-      variant: 'ao so mi cao co',
-      discount_type: '%',
-      discount_value: 10,
-      description: '10 Downing Street',
-      status: true,
-      date: [new Date(), new Date()]
-    },
-    {
-      _id: '2',
-      products: 'Mike',
-      variant: 'ao so mi cao co',
-      discount_type: '%',
-      discount_value: 10,
-      description: '10 Downing Street',
-      status: false,
-      date: [new Date(), new Date()]
+  const { data } = useQuery<IDiscounts[]>({
+    queryKey:['discounts'],
+    queryFn: async() => {
+      try {
+        const { data } = await api.get('api/discounts')
+        console.log('DATA', data)
+        return Array.isArray(data.data) ? data.data : [data.data]
+      } catch (error) {
+        console.log(error)
+      }
     }
-  ]
+  })
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn:async(id:string)=>{
+      try {
+        await api.delete(`api/discounts/${id}`)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onSuccess:( ) => {
+      queryClient.invalidateQueries({ queryKey:['discounts'] })
+      message.success('Delete discounts successfully')
+    }
+  })
+  const Del = (id:string) => {
+    mutation.mutate(id)
+  }
   const columns = [
     {
       title: '#',
@@ -32,14 +41,24 @@ const Discounts = () => {
       render:(_:any, __:any, index:number) => index + 1
     },
     {
+      title: 'product',
+      dataIndex: 'product',
+      key: 'product'
+    },
+    {
       title: 'products',
-      dataIndex: 'products',
-      key: 'products'
+      dataIndex: 'productID',
+      key: 'productID'
     },
     {
       title: 'variant',
-      dataIndex: 'variant',
-      key: 'variant'
+      dataIndex: 'variantID',
+      key: 'variantID'
+    },
+    {
+      title: 'code',
+      dataIndex: 'code',
+      key: 'code'
     },
     {
       title: 'khuyen mai',
@@ -52,27 +71,42 @@ const Discounts = () => {
       key: 'discount_value'
     },
     {
-      title: 'Mo ta',
-      dataIndex: 'description',
-      key: 'description'
-    },
-    {
-      title: 'Ngay bat dau',
-      dataIndex: 'date',
+      title: 'Ngày áp dụng',
       key: 'date',
-      render: (date: Date[]) => (
-        <span>{date[0].toLocaleDateString()} - {date[1].toLocaleDateString()}</span>
-      )
+      render: (_: any, record: IDiscounts) => {
+        if (Array.isArray(record.date) && record.date.length > 0) {
+          const start = record.date[0] ? new Date(record.date[0]).toLocaleDateString() : '--'
+          const end = record.date[1] ? new Date(record.date[1]).toLocaleDateString() : '--'
+          return (
+            <span>
+              {start} - {end}
+            </span>
+          )
+        }
+        return <span>--</span>
+      }
     },
     {
       title: 'Trang thai',
       dataIndex: 'status',
       key: 'status',
-      render:(status:boolean) => (
+      render:(status:string, record:IDiscounts) => (
         <Switch
-          checked={status}
-          checkedChildren='con'
-          unCheckedChildren='het'
+          checked={status === 'active'}
+          checkedChildren='active'
+          unCheckedChildren='inactive'
+          onChange={async (checked) => {
+            try {
+              await api.put(`api/discounts/${record._id}`, {
+                status:checked ? 'active' :'inactive'
+              })
+              message.success('Cap nhat trang thai thanh cong')
+              queryClient.invalidateQueries({ queryKey:['discounts'] })
+            } catch (error) {
+              console.log(error)
+            }
+          }}
+
         />
       )
     },
@@ -80,17 +114,18 @@ const Discounts = () => {
       title: 'Thao tac',
       dataIndex: 'id',
       key: 'id',
-      render:() => (
+      render:(_:any, record:IDiscounts) => (
         <>
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this task?"
             okText="Yes"
             cancelText="No"
+            onConfirm={() => Del (record._id)}
           >
             <Button danger>Delete</Button>
           </Popconfirm>
-          <Link to={'/discounts/update/1'}>
+          <Link to={`/discounts/update/${record._id}`}>
             <Button type='primary'>Edit</Button>
           </Link>
         </>
@@ -103,7 +138,11 @@ const Discounts = () => {
       <Link to={'/discounts/add'}>
         <Button type='primary' style={{ marginBottom:20 }}>Them khuyen mai</Button>
       </Link>
-      <Table dataSource={dataSource} columns={columns} rowKey={(data) => data._id}/>
+      <Table
+        dataSource={Array.isArray(data) ? data : []}
+        columns={columns}
+        rowKey={record => record._id}
+      />
     </div>
   )
 }

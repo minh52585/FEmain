@@ -1,82 +1,160 @@
-import type { FormProps } from 'antd'
-import { Button, Checkbox, Form, Input, message } from 'antd'
-import { useNavigate } from 'react-router'
-
-interface IRegister{
-  id:string
-  email:string
-  password:string
-  remember:boolean
-}
+import React from 'react'
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Select
+} from 'antd'
+import { IRegister } from '@/types/auth'
+import { useNavigate } from 'react-router';
+import instance from '@/config/axios.customize';
+import api from '@/config/axios.customize';
 const Register = () => {
-  const [form] = Form.useForm()
   const nav = useNavigate()
-  const onFinish: FormProps<IRegister>['onFinish'] = (values) => {
-    message.success('Register successfully')
-    const userData = {
-      ...values,
-      password: btoa(values.password)
+  const [form] = Form.useForm()
+  const { Option } = Select
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 }
     }
-    console.log ('Success:', userData)
+  }
 
-    nav('/login')
+  const tailFormItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+        offset: 0
+      },
+      sm: {
+        span: 16,
+        offset: 8
+      }
+    }
   }
-  const onFinishFailed: FormProps<IRegister>['onFinishFailed'] = (errorInfo) => {
-    console.log ('Failed:', errorInfo)
+  const onFinish = async (values: IRegister) => {
+    try {
+      await api.post('api/register', values)
+      message.success('Register success')
+      const userData = {
+        ...values,
+        password: btoa(values.password)
+      }
+      console.log(userData)
+      nav('/login')
+    } catch (error:any) {
+      if (error.response && error.response.data && error.response.data.message) {
+        message.error(error.response.data.message)
+        console.log('Lỗi đăng ký:', error.response.data.message)
+      } else {
+        message.error('Register failed')
+        console.log(error)
+      }
+    }
   }
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select style={{ width: 70 }}>
+        <Option value="86">+84</Option>
+        <Option value="87">+87</Option>
+      </Select>
+    </Form.Item>
+  )
   return (
-    <>
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Register</h2>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#f5f5f5'
+      }}>
+      <div>
+        <h2 style={{ textAlign:'center', marginBottom:24 }}>Register</h2>
         <Form
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
-          initialValues={{
-            email:'tamtvph50549@gmail.com',
-            password:'123456',
-            remember: true
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
+          {...formItemLayout}
           form={form}
+          onFinish={onFinish}
+          initialValues={{ residence: ['zhejiang', 'hangzhou', 'xihu'], prefix: '86' }}
+          style={{ maxWidth: 600 }}
+          scrollToFirstError
         >
-          <Form.Item<IRegister>
-            label="email"
+          <Form.Item
+            name="fullname"
+            label="fullname"
+            tooltip="What do you want others to call you?"
+            rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
             name="email"
+            label="E-mail"
             rules={[
-              { required: true, message: 'Please input your email' },
-              { type:'email', message:'No email address found!' }
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!'
+              },
+              {
+                required: true,
+                message: 'Please input your E-mail!'
+              }
             ]}
           >
             <Input />
           </Form.Item>
 
-          <Form.Item<IRegister>
-            label="Password"
+          <Form.Item
             name="password"
+            label="Password"
             rules={[
-              { required: true, message: 'Please input your password!' },
-              { min: 6, message: 'Password must be at least 6 characters' }
+              {
+                required: true,
+                message: 'Please input your password!'
+              }
             ]}
+            hasFeedback
           >
             <Input.Password />
           </Form.Item>
-
-          <Form.Item<IRegister> name="remember" valuePropName="checked" label={null}>
-            <Checkbox>Remember me</Checkbox>
+          <Form.Item
+            name="phoneNumber"
+            label="Phone Number"
+            rules={[{ required: true, message: 'Please input your phone number!' }]}
+          >
+            <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
           </Form.Item>
-
-          <Form.Item label={null}>
+          <Form.Item
+            name="address"
+            label="Address"
+            rules={[{ required: true, message: 'Please input your address!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="gender"
+            label="Gender"
+            rules={[{ required: true, message: 'Please select gender!' }]}
+          >
+            <Select placeholder="select your gender">
+              <Option value="male">Male</Option>
+              <Option value="female">Female</Option>
+              <Option value="other">Other</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-        Submit
+          Register
             </Button>
           </Form.Item>
         </Form>
       </div>
-    </>
+    </div>
   )
 }
 
