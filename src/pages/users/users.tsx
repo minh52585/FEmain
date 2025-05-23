@@ -1,61 +1,62 @@
-import { Table } from "antd";
+import { Switch, Table } from "antd";
+import { useState } from "react";
 
 const data = [
   {
     id: 1,
-    usersName: "nminh",
-    fullName: "Nhật Minh",
-    email: "nminh@gmail.com",
-    gender: "Nam",
+    usersName: "pquynh",
+    fullName: "Phạm Quỳnh",
+    email: "pquynh@gmail.com",
+    gender: "Nữ",
     avatar_url: "https://i.pravatar.cc/100",
     phone: "0977 907 877",
     address: "Hà Nội",
-    status: "ON",
+    role_id: "Admin",
+    status: true,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
   {
     id: 2,
-    usersName: "vhduy",
-    fullName: "Hữu Duy",
-    email: "vhduy@gmail.com",
-    gender: "Nam",
+    usersName: "nminh",
+    fullName: "Ngọc Minh",
+    email: "nminh@gmail.com",
+    gender: "Nữ",
     avatar_url: "https://i.pravatar.cc/200",
     phone: "0335 879 630",
-    address: "TP Hồ Chí Minh",
-    status: "ON",
+    address: "Sơn La",
+    role_id: "User",
+    status: true,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
   },
   {
     id: 3,
-    usersName: "tampv",
-    fullName: "Văn Tam",
-    email: "tamka@gmail.com",
-    gender: "Nữ",
+    usersName: "nduong",
+    fullName: "Nguyễn Dương",
+    email: "nduong@gmail.com",
+    gender: "Nam",
     avatar_url: "https://i.pravatar.cc/300",
     phone: "0988 909 765",
-    address: "Đà Nẵng",
-    status: "OFF",
+    address: "Cà Mau",
+    role_id: "User",
+    status: false,
     created_at: "2025-05-19T00:00:00Z",
     update_at: "2025-05-19T00:00:00Z",
-  },
-  {
-    id: 4,
-    usersName: "quocanh",
-    fullName: "Quốc Anh",
-    email: "vqa@gmail.com",
-    gender: "Nữ",
-    avatar_url: "https://i.pravatar.cc/400",
-    phone: "0788 808 158",
-    address: "Quảng Ninh",
-    status: "ON",
-    created_at: "2025-05-19T00:00:00Z",
-    update_at: "2025-05-19T00:00:00Z",
-  },
+  }
 ];
 
-const columns = [
+const Users = () => {
+  const [userData, setUserData] = useState(data);
+
+  const toggleStatus = (id: number) => {
+    const updatedData = userData.map(user =>
+      user.id === id ? { ...user, status: !user.status } : user
+    );
+    setUserData(updatedData);
+  };
+  
+  const columns = [
   {
     title: "ID",
     dataIndex: "id",
@@ -98,32 +99,44 @@ const columns = [
     key: "address"
   },
   {
+    title: "Vai trò",
+    dataIndex: "role_id",
+    key: "role_id"
+  },
+  {
     title: "Trạng thái",
     dataIndex: "status",
     key: "status",
-    render: (status: string) => {
-      const isActive = status === "ON";
-      const backgroundColor = isActive ? "#e6ffe6" : "#ffe6e6";
-      const textColor = isActive ? "limegreen" : "tomato";
-      return (
-        <span style={{ backgroundColor, color: textColor, fontWeight: 600, padding: "3px 6px", borderRadius: "17px", display: "inline-block" }}>
-          {status}
-        </span>
-      )
-    }
+    render: (status: boolean) => (
+      <span style={{
+        backgroundColor: status ? "#e6ffe6" : "#ffe6e6",
+        color: status ? "limegreen" : "tomato",
+        fontWeight: 600,
+        padding: "3px 6px",
+        borderRadius: "17px",
+        display: "inline-block"
+      }}>
+        {status ? "ON" : "OFF"}
+      </span>
+    )
   },
   {
     title: "Hành động",
     dataIndex: "action",
-
+    render: (_: any, record: { id: number; status: boolean }) => (
+      <Switch 
+        checked={record.status}
+        onChange={() => toggleStatus(record.id)}
+        style={{ minWidth: 30 }}
+      />
+    )
   },
 ]
 
-const Users = () => {
   return (
     <>
       <h1 style={{ marginBottom: 24 }}>Danh sách khách hàng</h1>
-      <Table columns={columns} dataSource={data} rowKey="id" pagination={{pageSize: 4}}/>
+      <Table columns={columns} dataSource={userData} rowKey="id" pagination={{pageSize: 4}}/>
     </>
   )
 }

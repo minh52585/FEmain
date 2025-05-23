@@ -20,6 +20,8 @@ import ProductsPage from '@/pages/products/products'
 import ProductsUpdate from '@/pages/products/products.update.pages'
 import DiscountsAdd from '@/pages/discounts/discounts.add.pages'
 import DiscountsUpdate from '@/pages/discounts/discounts.update.pages'
+import AddCoupon from '@/pages/coupons/addCoupon'
+import EditCoupon from '@/pages/coupons/editCoupon'
 
 const Routers = () => {
   const isAuthenticated = true
@@ -43,6 +45,8 @@ const Routers = () => {
           <Route path='/categories/edit/:id' element={<EditCategory />} />         
           <Route path='/orders' element={<Orders />} />
           <Route path='/coupons' element={<Coupons />} />
+          <Route path='/coupons/add' element={<AddCoupon />} />
+          <Route path='/coupons/edit/:id' element={<EditCoupon />} />
           <Route path='/reviews' element={<Reviews />} />
         </Route>
       </Route>
