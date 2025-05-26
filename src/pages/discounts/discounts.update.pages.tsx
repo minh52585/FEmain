@@ -6,7 +6,9 @@ import {
   Form,
   Input,
   message,
-  Select
+  Select,
+  Row,
+  Col
 } from 'antd'
 import { IDiscounts } from '../../types/discounts.ts'
 import { useNavigate, useParams } from 'react-router'
@@ -39,17 +41,6 @@ const DiscountsUpdate = () => {
   },  [ data ] )
   const nav = useNavigate()
   const { RangePicker } = DatePicker
-
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 6 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 14 }
-    }
-  }
   const [form] = Form.useForm()
   const onFinish = async (values: IDiscounts) => {
     try {
@@ -81,62 +72,62 @@ const DiscountsUpdate = () => {
   }
   return (
     <Form
-      {...formItemLayout}
       form={form}
-      style={{ maxWidth: 600 }}
+      layout="vertical"
+      style={{ maxWidth: 800, margin: '0 auto' }}
       onFinish={onFinish}
     >
-      <Form.Item label="Product1" name="product" rules={[{ required: true, message: 'Please input!' }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item label="Product2" name="productID" rules={[{ required: true, message: 'Please input!' }]}>
-        <Input />
-      </Form.Item>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Mã sản phẩm" name="productID" rules={[{ required: true, message: 'Vui lòng chọn mã sản phẩm' }]}>
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Mã biến thể" name="variantID" rules={[{ required: true, message: 'Vui lòng chọn mã biến thể' }]}>
+            <Input/>
+          </Form.Item>
+        </Col>
+      </Row>
+      
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Phân loại" name='discount_type' rules={[{ required:true, message:'Vui lòng chọn phân loại' }]}>
+            <Select>
+              <Select.Option value="%">Phần trăm</Select.Option>
+              <Select.Option value="vnd">Tiền mặt</Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label="Giá trị"
+            name="discount_value"
+            rules={[{ required: true, message: 'Vui lòng nhập giá trị' }]}>
+              <Input/>
+          </Form.Item>
+        </Col>
+      </Row>
 
-      <Form.Item
-        label="Variant"
-        name="variantID"
-        rules={[{ required: true, message: 'Please input!' }]}
-      >
-        <Input/>
-      </Form.Item>
-      <Form.Item
-        label="Ma code"
-        name="code"
-        rules={[{ required: true, message: 'Please input!' }]}
-      >
-        <Input/>
-      </Form.Item>
-      <Form.Item label="Khuyen mai" name='discount_type' rules={[{ required:true, message:'Vui long nhap khuyen mai' }]}>
-        <Select>
-          <Select.Option value="%">%</Select.Option>
-          <Select.Option value="vnd">Vnd</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Gia tri"
-        name="discount_value"
-        rules={[{ required: true, message: 'Please input!' }]}
-      >
-        <Input/>
-      </Form.Item>
-      <Form.Item label="Trang thai" name='status' rules={[{ required:true, message:'Vui long nhap trang thai' }]}>
-        <Select>
-          <Select.Option value="active">active</Select.Option>
-          <Select.Option value="inactive">inactive</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Date"
-        name="date"
-        rules={[{ required: true, message: 'Please input!' }]}
-      >
-        <RangePicker/>
-      </Form.Item>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Trạng thái" name='status' rules={[{ required:true, message:'Vui lòng chọn trạng thái' }]}>
+            <Select>
+              <Select.Option value="active">Hoạt động</Select.Option>
+              <Select.Option value="inactive">Tạm dừng</Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Thời gian áp dụng" name="date" rules={[{ required: true, message: 'Chọn thời gian áp dụng' }]}>
+            <RangePicker style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+      </Row>
 
-      <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
+      <Form.Item>
+        <Button type="primary" htmlType="submit" block>
+          Xác nhận
         </Button>
       </Form.Item>
     </Form>

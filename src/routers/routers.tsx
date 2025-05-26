@@ -22,6 +22,9 @@ import DiscountsAdd from '@/pages/discounts/discounts.add.pages'
 import DiscountsUpdate from '@/pages/discounts/discounts.update.pages'
 import AddCoupon from '@/pages/coupons/addCoupon'
 import EditCoupon from '@/pages/coupons/editCoupon'
+import AddVariant from '@/pages/variants/addVariant'
+import EditVariant from '@/pages/variants/editVariant'
+import OrderDetails from '@/pages/orders/orderDetails'
 
 const Routers = () => {
   const isAuthenticated = true
@@ -37,6 +40,8 @@ const Routers = () => {
           <Route path='/products' element={<ProductsPage />} />
           <Route path='/products/update/:id' element={<ProductsUpdate />} />
           <Route path='/variants' element={<Variants />} />
+          <Route path='/variants/add' element={<AddVariant />} />
+          <Route path='/variants/edit/:id' element={<EditVariant />} />
           <Route path='/discounts' element={<Discounts />} />
           <Route path='/discounts/add' element={<DiscountsAdd />} />
           <Route path='/discounts/update/:id' element={<DiscountsUpdate />} />
@@ -44,6 +49,7 @@ const Routers = () => {
           <Route path='/categories/add' element={<AddCategory />} />
           <Route path='/categories/edit/:id' element={<EditCategory />} />         
           <Route path='/orders' element={<Orders />} />
+          <Route path='/order/details/:id' element={<OrderDetails />} />
           <Route path='/coupons' element={<Coupons />} />
           <Route path='/coupons/add' element={<AddCoupon />} />
           <Route path='/coupons/edit/:id' element={<EditCoupon />} />

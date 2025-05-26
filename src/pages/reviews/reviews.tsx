@@ -10,18 +10,15 @@ const products = [
 ];
 
 const reviews = [
-  { id: 101, users_id: 675, product_id: 1, rating: 5, title: "Hài lòng", content: "Giao nhanh, giá cả hợp lý, đáng trải nghiệm!", imageUrl: "https://rg.com.vn/OuV1K"},
-  { id: 102, users_id: 468, product_id: 1, rating: 4.5, title: "Khá hài lòng", content: "Giá cả hợp lý!", imageUrl: "https://rg.com.vn/OuV1K"},
-  { id: 103, users_id: 345, product_id: 1, rating: 3, title: "Bình thường", content: "Sp ok", imageUrl: "https://rg.com.vn/OuV1K"},
-  { id: 104, users_id: 988, product_id: 2, rating: 5, title: "Hài lòng", content: "Sách hay, tập trung vào chủ đề chính", imageUrl: "https://rg.com.vn/MtZMq"},
-  { id: 105, users_id: 678, product_id: 2, rating: 5, title: "Hài lòng", content: "Hay.", imageUrl: "https://rg.com.vn/MtZMq"},
-  { id: 106, users_id: 567, product_id: 3, rating: 4, title: "Khá hài lòng", content: "OK", imageUrl: "https://rg.com.vn/GrvKc"},
-  { id: 107, users_id: 347, product_id: 4, rating: 2, title: "Chưa hài lòng", content: "Giao chậm, giá cũng bthg", imageUrl: "https://rg.com.vn/hqUew"},
-  { id: 108, users_id: 124, product_id: 4, rating: 4, title: "Khá hài lòng", content: "Đọc rất hay nha mặc dù giao hơi lâu", imageUrl: "https://rg.com.vn/hqUew"},
-  { id: 109, users_id: 981, product_id: 4, rating: 4.5, title: "Khá hài lòng", content: "Ok Hay", imageUrl: "https://rg.com.vn/hqUew"},
-  { id: 110, users_id: 337, product_id: 5, rating: 3, title: "Bình thường", content: "Sách OK", imageUrl: "https://rg.com.vn/qHTdo"},
-  { id: 111, users_id: 246, product_id: 5, rating: 1, title: "Tệ", content: "Giao chậm, trả lời khách cục súc", imageUrl: "https://rg.com.vn/qHTdo"},
-  { id: 112, users_id: 335, product_id: 5, rating: 1, title: "Tệ", content: "Thái độ với khách, màu sách không giống hình!", imageUrl: "https://rg.com.vn/qHTdo"},
+  { id: 101, users_id: 468, product_id: 1, rating: "⭐⭐⭐⭐", title: "Khá hài lòng", content: "Giá cả hợp lý!", imageUrl: "https://rg.com.vn/OuV1K"},
+  { id: 102, users_id: 345, product_id: 1, rating: "⭐⭐⭐", title: "Bình thường", content: "Sp ok", imageUrl: "https://rg.com.vn/OuV1K"},
+  { id: 103, users_id: 988, product_id: 2, rating: "⭐⭐⭐⭐⭐", title: "Hài lòng", content: "Sách hay, tập trung vào chủ đề chính", imageUrl: "https://rg.com.vn/MtZMq"},
+  { id: 104, users_id: 678, product_id: 2, rating: "⭐⭐⭐⭐⭐", title: "Hài lòng", content: "Hay.", imageUrl: "https://rg.com.vn/MtZMq"},
+  { id: 105, users_id: 567, product_id: 3, rating: "⭐⭐⭐⭐", title: "Khá hài lòng", content: "OK", imageUrl: "https://rg.com.vn/GrvKc"},
+  { id: 106, users_id: 124, product_id: 4, rating: "⭐⭐⭐⭐", title: "Khá hài lòng", content: "Đọc rất hay nha mặc dù giao hơi lâu", imageUrl: "https://rg.com.vn/hqUew"},
+  { id: 107, users_id: 981, product_id: 4, rating: "⭐⭐⭐⭐", title: "Khá hài lòng", content: "Ok Hay", imageUrl: "https://rg.com.vn/hqUew"},
+  { id: 108, users_id: 246, product_id: 5, rating: "⭐", title: "Tệ", content: "Giao chậm, trả lời khách cục súc", imageUrl: "https://rg.com.vn/qHTdo"},
+  { id: 109, users_id: 335, product_id: 5, rating: "⭐", title: "Tệ", content: "Thái độ với khách, màu sách không giống hình!", imageUrl: "https://rg.com.vn/qHTdo"},
 ];
 
 const Reviews = () => {
@@ -38,7 +35,7 @@ const Reviews = () => {
       key: "name"
     },
     {
-      title: "",
+      title: "Hành động",
       dataIndex: "actions",
       render: (_: any, record: any) => (
         <Button type="link" onClick={() => {

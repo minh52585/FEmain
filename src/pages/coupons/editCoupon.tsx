@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, InputNumber, message, Select } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, message, Select, Row, Col } from 'antd';
 import { useNavigate } from 'react-router';
 import dayjs from 'dayjs';
 
@@ -49,13 +49,12 @@ const EditCoupon = () => {
     };
 
     console.log('Cập nhật:', updatedCoupon);
-    message.success('Cập nhật mã giảm giá thành công');
+    message.success('Cập nhật mã giảm giá thành công!');
     nav('/coupons');
   };
 
   return (
     <>
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Cập nhật mã giảm giá</h2>
       <Form
         form={form}
         layout="vertical"
@@ -63,43 +62,63 @@ const EditCoupon = () => {
         onFinish={onFinish}
         style={{ maxWidth: 600, margin: '0 auto' }}
       >
-        <Form.Item label="Mã giảm giá" name="coupons_code" rules={[{ required: true }]}>
-          <Input disabled />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Mã giảm giá" name="coupons_code" rules={[{ required: true }]}>
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Tiêu đề" name="title" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item label="Tiêu đề" name="title" rules={[{ required: true }]}>
-          <Input />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Loại giảm" name="discount_type" rules={[{ required: true }]}>
+              <Select>
+                <Select.Option value="percent">Phần trăm</Select.Option>
+                <Select.Option value="amount">Tiền mặt</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Giá trị giảm" name="discount_value" rules={[{ required: true }]}>
+              <InputNumber style={{ width: '100%' }} min={1} />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item label="Loại giảm" name="discount_type" rules={[{ required: true }]}>
-          <Select>
-            <Select.Option value="percent">Phần trăm</Select.Option>
-            <Select.Option value="amount">Tiền mặt</Select.Option>
-          </Select>
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Giá trị đơn hàng tối thiểu" name="min_order_value" rules={[{ required: true }]}>
+              <InputNumber style={{ width: '100%' }} min={0} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Trạng thái" name="status">
+              <Select>
+                <Select.Option value="ON">Mở</Select.Option>
+                <Select.Option value="OFF">Khoá</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item label="Giá trị giảm" name="discount_value" rules={[{ required: true }]}>
-          <InputNumber style={{ width: '100%' }} min={1} />
-        </Form.Item>
-
-        <Form.Item label="Giá trị đơn hàng tối thiểu" name="min_order_value" rules={[{ required: true }]}>
-          <InputNumber style={{ width: '100%' }} min={0} />
-        </Form.Item>
-
-        <Form.Item label="Thời gian áp dụng" name="date_range" rules={[{ required: true }]}>
-          <RangePicker style={{ width: '100%' }} />
-        </Form.Item>
-
-        <Form.Item label="Mô tả" name="desciption" rules={[{ required: true }]}>
-          <TextArea rows={3} />
-        </Form.Item>
-
-        <Form.Item label="Trạng thái" name="status">
-          <Select>
-            <Select.Option value="ON">Mở</Select.Option>
-            <Select.Option value="OFF">Khoá</Select.Option>
-          </Select>
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Thời gian áp dụng" name="date_range" rules={[{ required: true }]}>
+              <RangePicker style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Mô tả" name="desciption" rules={[{ required: true }]}>
+              <TextArea rows={3} />
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Form.Item>
           <Button type="primary" htmlType="submit" block>
