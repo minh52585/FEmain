@@ -2,9 +2,11 @@ import {
   Button,
   Form,
   Input,
-  InputNumber,
   message,
-  Select
+  Select,
+  Row,
+  Col,
+  InputNumber,
 } from 'antd'
 import axios from 'axios'
 import { useState } from 'react'
@@ -58,73 +60,95 @@ const ProductsAdd = () => {
 
   return (
     <>
-      <div style={{ maxWidth: '600px', margin: '0', padding: '20px' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Products</h2>
-        <Form form={form} onFinish={onFinish} {...formItemLayout} layout='vertical'>
-          <Form.Item label="Ten san pham" name='name' rules={[
-            { required: true, message: 'Vui long nhap ten san pham' },
-            { min: 3, message: 'Ten san pham phai co it nhat 3 ky tu' }
+    <Form form={form} onFinish={onFinish} {...formItemLayout} layout='vertical' style={{ maxWidth: 800, margin: '0 auto' }}>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Tên" name='name' rules={[
+            { required: true, message: 'Vui lòng nhập tên sản phẩm' },
+            { min: 3, message: 'Tên sản phẩm chứa ít nhất 3 ký tự' }
           ]}>
-            <Input />
+            <Input placeholder="VD: Hồ sơ tâm lý học"/>
           </Form.Item>
-          <Form.Item label="Mo ta" name='description' rules={[
-            { required: true, message: 'Vui long nhap mo ta san pham' },
-            { min: 10, message: 'Mo ta san pham phai co it nhat 10 ky tu' }
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Mô tả" name='description' rules={[
+            { required: true, message: 'Vui lòng nhập mô tả' },
+            { min: 10, message: 'Mô tả chứa ít nhất 10 ký tự' }
           ]}>
-            <TextArea rows={4} />
+            <TextArea rows={2} placeholder="Mô tả hiển thị" />
           </Form.Item>
-          <Form.Item label="Gia san pham" name='price' rules={[
-            { required: true, message: 'Vui long nhap gia san pham' },
-            { type: 'number', message: 'Gia san pham phai la so' }
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Giá tiền" name='price' rules={[
+            { required: true, message: 'Vui lòng nhập giá tiền' },
+            { type: 'number', message: 'Giá sản phẩm phải là số' },
           ]}>
-            <InputNumber />
+            <InputNumber placeholder="Giá tiền lớn hơn 10.000" style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item label="So luong trong kho" name='quantity' rules={[
-            { required: true, message: 'Vui long nhap so luong san pham' },
-            { type: 'number', message: 'So luong san pham phai la so' }
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Số lượng" name='quantity' rules={[
+            { required: true, message: 'Vui lòng nhập số lượng trong kho' },
+            { type: 'number', message: 'Số lượng phải là số' }
           ]}>
-            <InputNumber />
+            <InputNumber placeholder="Số lượng lớn hơn 0" style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item label="Danh muc san pham" name='category' rules={[
-            { required: true, message: 'Vui long chon danh muc san pham' }
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Danh mục" name='category' rules={[
+            { required: true, message: 'Vui lòng chọn danh mục sản phẩm' }
           ]}>
-            <Input />
+            <Select placeholder="-- Chọn --">
+              <Select.Option value="Tâm lý học">Tâm lý học</Select.Option>
+              <Select.Option value="Phát triển bản thân">Phát triển bản thân</Select.Option>
+              <Select.Option value="Lãng mạn">Lãng mạn</Select.Option>
+              <Select.Option value="Trinh thám">Trinh thám</Select.Option>
+              <Select.Option value="Tiểu thuyết">Tiểu thuyết</Select.Option>
+            </Select>
           </Form.Item>
-          <div style={{ marginBottom: '20px' }}>
-            <label className="block text-lg font-medium text-gray-600 mb-2">
-                  Hình ảnh
-            </label>
-            <input
-              type="file"
-              onChange={(e) => uploadImage(e.target.files)}
-              className="w-full p-3 border rounded-lg"
-            />
-            {loading && <p className="text-blue-500 mt-2">Đang tải ảnh...</p>}
-            {image && (
-              <img
-                src={image}
-                alt="Uploaded"
-                className="mt-2 w-32 h-32 object-cover rounded"
-                style={{ display: 'block', margin: '0 auto', width: '350px', height: '350px' }}
-              />
-            )}
-          </div>
-          <Form.Item name="images" style={{ display: 'none' }}>
-            <Input type="hidden" />
-          </Form.Item>
-          <Form.Item label="Select" name='status' >
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Trạng thái" name='status' initialValue="Còn hàng">
             <Select>
               <Select.Option value="Còn hàng">Còn hàng</Select.Option>
               <Select.Option value="Hết hàng">Hết hàng</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label={null}>
-            <Button type="primary" htmlType="submit">
-            Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+        </Col>
+      </Row>
+
+      <div style={{ marginBottom: '20px' }}>
+        <label className="block text-lg font-medium text-gray-600 mb-2">Hình ảnh</label>
+          <input
+            type="file"
+            onChange={(e) => uploadImage(e.target.files)}
+            className="w-full p-3 border rounded-lg"
+          />
+          {loading && <p className="text-blue-500 mt-2">Đang tải ảnh...</p>}
+          {image && (
+            <img
+              src={image}
+              alt="Uploaded"
+              className="mt-2 w-32 h-32 object-cover rounded"
+              style={{ display: 'block', margin: '0 auto', width: '350px', height: '350px' }}
+            />
+          )}
+        </div>
+        <Form.Item name="images" style={{ display: 'none' }}>
+          <Input type="hidden" />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Xác nhận
+          </Button>
+        </Form.Item>
+    </Form>
     </>
   )
 }

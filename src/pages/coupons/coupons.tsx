@@ -71,7 +71,7 @@ const columns = [
     render: (value: number) => `${value.toLocaleString()}₫`
   },
   {
-    title: "Thời gian",
+    title: "Thời gian áp dụng",
     key: "time_range",
     render: (_: any, record: any) =>
       `${new Date(record.start_date).toLocaleDateString()} - ${new Date(record.end_date).toLocaleDateString()}`

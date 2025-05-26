@@ -40,7 +40,6 @@ const EditCategory = () => {
 
   return (
     <>
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Cập nhật danh mục</h2>
       <Form
         form={form}
         layout="vertical"
@@ -66,7 +65,7 @@ const EditCategory = () => {
             { min: 10, message: 'Mô tả ít nhất 10 ký tự' }
           ]}
         >
-          <TextArea rows={3} />
+          <TextArea rows={3} placeholder="Mô tả hiển thị" />
         </Form.Item>
 
         <Form.Item
