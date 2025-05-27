@@ -1,6 +1,6 @@
 import { useSystemTheme } from '@/hooks/useSystemTheme'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { setStateThemeMode } from '@/redux/slices/app.slices'
+import { useAppSelector, useAppDispatch } from '@/pages/store/redux/hooks'
+import { setStateThemeMode } from '@/pages/store/redux/slices/app.slices'
 import { Select } from 'antd'
 import { useEffect } from 'react'
 

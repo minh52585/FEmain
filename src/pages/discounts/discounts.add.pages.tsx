@@ -69,7 +69,7 @@ const DiscountsAdd = () => {
           <Form.Item label="Phân loại" name='discount_type' rules={[{ required:true, message:'Vui lòng chọn phân loại' }]}>
             <Select>
               <Select.Option value="%">Phần trăm</Select.Option>
-              <Select.Option value="vnd">Tiền mặt</Select.Option>
+              <Select.Option value="VNĐ">Tiền mặt</Select.Option>
             </Select>
           </Form.Item>
         </Col>
@@ -87,8 +87,8 @@ const DiscountsAdd = () => {
         <Col span={12}>
           <Form.Item label="Trạng thái" name='status' rules={[{ required:true, message:'Vui lòng chọn trạng thái' }]}>
             <Select>
-              <Select.Option value="active">Hoạt động</Select.Option>
-              <Select.Option value="inactive">Tạm dừng</Select.Option>
+              <Select.Option value="Mở">Mở</Select.Option>
+              <Select.Option value="Khoá">Khoá</Select.Option>
             </Select>
           </Form.Item>
         </Col>
