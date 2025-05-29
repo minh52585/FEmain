@@ -1,42 +1,40 @@
+import api from '@/config/axios.customize';
+import { ICategory } from '@/types/category';
+import { useQuery } from '@tanstack/react-query';
 import { Button, Form, Input, message, Select } from 'antd';
-import { useNavigate, useParams } from 'react-router';
 import { useEffect } from 'react';
-
-const { TextArea } = Input;
-
-interface ICategory {
-  name: string;
-  slug: string;
-  description: string;
-  image_url: string;
-  status: 'ON' | 'OFF';
-}
+import { useNavigate, useParams } from 'react-router';
 
 const EditCategory = () => {
-  const nav = useNavigate();
-  const { id } = useParams();
-  const [form] = Form.useForm();
-
+  const { id } = useParams()
+  const { data } = useQuery({
+    queryKey: ['category', id],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get(`api/categories/${id}`)
+        console.log('DATA', data)
+        return Array.isArray(data.data) ? data.data : [data.data]
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
   useEffect(() => {
-    const fetchData = async () => {
-      const fakeData: ICategory = {
-        name: "Tâm lý học",
-        slug: "tam-ly-hoc",
-        description: "Danh mục sách về tâm lý học và phát triển cá nhân",
-        image_url: "https://example.com/image.jpg",
-        status: "ON"
-      };
-      form.setFieldsValue(fakeData);
-    };
-
-    fetchData();
-  }, [form, id]);
-
-  const onFinish = (values: ICategory) => {
-    console.log("Updated Category:", values);
-    message.success("Cập nhật danh mục thành công");
-    nav("/categories");
-  };
+    if (data && data[0]) {
+      form.setFieldsValue({
+        ...data[0]
+      })
+    }
+  }, [ data ] )
+  const { TextArea } = Input
+  const nav = useNavigate()
+  const [form] = Form.useForm()
+  const onFinish = async (values: ICategory) => {
+    await api.put(`api/categories/${id}`, values)
+    console.log('Category:', values)
+    message.success('Sửa danh mục thành công!')
+    nav('/categories')
+  }
 
   return (
     <>
@@ -54,9 +52,28 @@ const EditCategory = () => {
             { min: 3, message: 'Ít nhất 3 ký tự' }
           ]}
         >
-          <Input placeholder="VD: Tâm lý học" />
+          <Input placeholder="VD: Tiểu thuyết" />
         </Form.Item>
-
+        <Form.Item
+          label="Tên đường dẫn"
+          name="slug"
+          rules={[
+            { required: true, message: 'Vui lòng nhập tên đường dẫn' },
+            { min: 3, message: 'Ít nhất 3 ký tự' }
+          ]}
+        >
+          <Input placeholder="VD: tieu-thuyet"/>
+        </Form.Item>
+        <Form.Item
+          label="Trạng thái"
+          name="status"
+          initialValue="active"
+        >
+          <Select>
+            <Select.Option value="active">Mở</Select.Option>
+            <Select.Option value="inactive">Khoá</Select.Option>
+          </Select>
+        </Form.Item>
         <Form.Item
           label="Mô tả"
           name="description"
@@ -68,29 +85,9 @@ const EditCategory = () => {
           <TextArea rows={3} placeholder="Mô tả hiển thị" />
         </Form.Item>
 
-        <Form.Item
-          label="Hình ảnh"
-          name="image_url"
-          rules={[
-            { required: true, message: 'Vui lòng nhập URL hình ảnh'},
-          ]}
-        >
-          <Input placeholder='URL hình ảnh hiển thị' />
-        </Form.Item>
-
-        <Form.Item
-          label="Trạng thái"
-          name="status"
-        >
-          <Select>
-            <Select.Option value="ON">Mở</Select.Option>
-            <Select.Option value="OFF">Khoá</Select.Option>
-          </Select>
-        </Form.Item>
-
         <Form.Item>
           <Button type="primary" htmlType="submit" block>
-            Cập nhật
+            Xác nhận
           </Button>
         </Form.Item>
       </Form>
@@ -98,4 +95,4 @@ const EditCategory = () => {
   );
 };
 
-export default EditCategory;
+export default EditCategory

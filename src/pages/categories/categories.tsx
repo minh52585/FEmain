@@ -1,79 +1,59 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Space, Table } from "antd";
-import { Link } from "react-router";
-import { getCategoryColumns } from "../contants/category/categoryColumns";
+import { PlusOutlined } from '@ant-design/icons'
+import { Button, message, Table } from 'antd'
+import { getCategoryColumns } from '../contants/category/categoryColumns'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import api from '@/config/axios.customize'
+import { Link } from 'react-router'
 
-const onDelete = (id:number) => {
-  console.log("Xoá danh mục", id);
-}
+const Category = () => {
+  const { data } = useQuery({
+    queryKey: ['category'],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get('api/categories/')
+        console.log('DATA', data)
+        return Array.isArray(data.data) ? data.data : [data.data]
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        await api.delete(`api/categories/${id}`)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['category'] })
+      message.success('Xoá danh mục thành công!')
+    }
+  })
+  const DelCategory = (id:string) => {
+    mutation.mutate(id)
+    console.log('Xoá danh mục', id)
+  }
+  const columns = getCategoryColumns(queryClient,DelCategory)
 
-const data = [
-  {
-    id: 1,
-    name: "Tâm lý học",
-    slug: "tam-ly-hoc",
-    description: "Sách khám phá hành vi, cảm xúc và tâm trí con người.",
-    image_url: "https://rg.com.vn/OuV1K",
-    status: "OFF",
-    created_at: "2025-05-19T00:00:00Z",
-    update_at: "2025-05-19T00:00:00Z",
-  },
-  {
-    id: 2,
-    name: "Phát triển bản thân",
-    slug: "phat-trien-ban-than",
-    description: "Sách hướng dẫn và truyền động lực để cải thiện cuộc sống.",
-    image_url: "https://rg.com.vn/MtZMq",
-    status: "ON",
-    created_at: "2025-05-19T00:00:00Z",
-    update_at: "2025-05-19T00:00:00Z",
-  },
-  {
-    id: 3,
-    name: "Lãng mạn",
-    slug: "lang-man",
-    description: "Những câu chuyện tình yêu cảm động.",
-    image_url: "https://rg.com.vn/GrvKc",
-    status: "ON",
-    created_at: "2025-05-19T00:00:00Z",
-    update_at: "2025-05-19T00:00:00Z",
-  },
-  {
-    id: 4,
-    name: "Trinh thám",
-    slug: "trinh-tham",
-    description: "Sách ly kỳ, bí ẩn và hấp dẫn với các vụ án và điều tra.",
-    image_url: "https://rg.com.vn/hqUew",
-    status: "OFF",
-    created_at: "2025-05-19T00:00:00Z",
-    update_at: "2025-05-19T00:00:00Z",
-  },
-  {
-    id: 5,
-    name: "Tiểu thuyết",
-    slug: "tieu-thuyet",
-    description: "Những câu chuyện hư cấu thuộc nhiều thể loại khác nhau.",
-    image_url: "https://rg.com.vn/qHTdo",
-    status: "ON",
-    created_at: "2025-05-19T00:00:00Z",
-    update_at: "2025-05-19T00:00:00Z",
-  },
-];
-
-const columns = getCategoryColumns(queryClient, DelCategory)
-
-const Categories = () => {
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 11 }}>
         <h1>Danh mục sách</h1>
-        <Link to={`/categories/add`}>
-          <Button icon={<PlusOutlined />} size="small" style={{ backgroundColor: "white", color: "dodgerblue", borderColor: "dodgerblue" }}></Button>
+        <Link to={'/categories/add'}>
+          <Button icon={<PlusOutlined />} size="small" style={{ backgroundColor: 'white', color: 'dodgerblue', borderColor: 'dodgerblue' }}></Button>
         </Link>
       </div>
-      <Table columns={columns} dataSource={data} rowKey="id" pagination={{ pageSize: 3 }}/>
+      <Table
+        dataSource={Array.isArray(data) ? data : []}
+        columns={columns}
+        rowKey={record => record._id}
+      />
     </>
   )
 }
 
-export default Categories
+
+export default Category

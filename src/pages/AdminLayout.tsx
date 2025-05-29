@@ -1,8 +1,8 @@
 import { Layout, theme } from 'antd'
-import AppHeader from '@/components/app/app.header'
-import AppSidebar from '@/components/app/app.sidebar'
+import AppHeader from '@/components/common/app.header'
+import AppSidebar from '@/components/common/app.sidebar'
 import { Outlet } from 'react-router'
-import AppBreadcrumb from '@/components/app/app.breadcrumb'
+import AppBreadcrumb from '@/components/common/app.breadcrumb'
 
 const { Content } = Layout
 

@@ -31,7 +31,7 @@ const ProductsPage = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      message.success('Delete product successfully')
+      message.success('Xoá sản phẩm thành công!')
     }
   })
   const DelProduct = (id: string) => {
@@ -48,7 +48,7 @@ const ProductsPage = () => {
           <Button icon={<PlusOutlined />} size="small" style={{ backgroundColor: "white", color: "dodgerblue", borderColor: "dodgerblue" }}></Button>
         </Link>
       </div>
-      <Table dataSource={Array.isArray(data) ? data : []} columns={columns} rowKey={record => record._id} />
+      <Table dataSource={Array.isArray(data) ? data : []} columns={columns} rowKey={record => record._id} pagination={{ pageSize: 3}} />
     </>
   )
 }

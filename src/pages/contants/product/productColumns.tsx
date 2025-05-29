@@ -47,16 +47,16 @@ export const getProductColumns = (queryClient: any, DelProduct: (id: string) => 
     key: 'status',
     render: (status: string, record: IProducts) => (
       <Switch
-        checked={status === 'Còn hàng'}
-        checkedChildren="Còn hàng"
-        unCheckedChildren="Hết hàng"
+        checked={status === 'Sẵn'}
+        checkedChildren="Sẵn"
+        unCheckedChildren="Hết"
         style={{ minWidth: 50 }}
         onChange={async (checked) => {
           try {
             await api.put(`api/products/${record._id}`, {
-              status: checked ? 'Còn hàng' : 'Hết hàng'
+              status: checked ? 'Sẵn' : 'Hết'
             })
-            message.success('Cập nhật trạng thái thành công');
+            message.success('Cập nhật trạng thái thành công!');
             queryClient.invalidateQueries({ queryKey: ['products'] });
           } catch (error) {
             console.log(error)

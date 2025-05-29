@@ -1,7 +1,4 @@
-import { Breadcrumb, BreadcrumbProps } from 'antd'
-import { matchPath, useLocation } from 'react-router'
-
-const breadcrumbNameMap: Record<string, { group: string, label: string, action?: string }> = {
+export const breadcrumbNameMap: Record<string, { group: string, label: string, action?: string }> = {
   '/': { group: 'Tổng quan', label: 'Dashboard' },
   '/analytics': { group: 'Tổng quan', label: 'Thống kê' },
   '/users': { group: 'Quản lý', label: 'Khách hàng' },
@@ -24,25 +21,3 @@ const breadcrumbNameMap: Record<string, { group: string, label: string, action?:
   '/coupons/edit/:id': { group: 'Quản lý', label: 'Mã giảm giá', action: "Cập nhật" },
   '/reviews': { group: 'Quản lý', label: 'Đánh giá' },
 }
-
-const AppBreadcrumb = () => {
-  const location = useLocation();
-  const { pathname } = location;
-  const matched = Object.entries(breadcrumbNameMap).find(([key]) =>
-    matchPath(key, pathname)
-  )?.[1];
-
-  const breadcrumbItems: BreadcrumbProps['items'] = matched
-    ? [
-        { title: matched.group },
-        { title: matched.label },
-        ...(matched.action ? [{ title: matched.action }] : [])
-      ]
-    : [{ title: 'Trang không xác định' }];
-
-  return (
-    <Breadcrumb style={{ margin: '16px 0' }} items={breadcrumbItems} />
-  );
-};
-
-export default AppBreadcrumb;

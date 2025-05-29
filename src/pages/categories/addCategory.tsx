@@ -1,30 +1,18 @@
+import api from '@/config/axios.customize';
+import { ICategory } from '@/types/category';
 import { Button, Form, Input, message, Select } from 'antd';
 import { useNavigate } from 'react-router';
-import dayjs from 'dayjs';
-
-const { TextArea } = Input;
-
-interface ICategory {
-  name: string;
-  slug: string;
-  description: string;
-  image_url: File[];
-  status: 'ON' | 'OFF';
-  date_range: [dayjs.Dayjs, dayjs.Dayjs];
-}
 
 const AddCategory = () => {
-  const nav = useNavigate();
-  const [form] = Form.useForm();
-
-  const onFinish = (values: any) => {
-    const categoryData: ICategory = {
-      ...values
-    };
-    console.log("Category:", categoryData);
-    message.success("Thêm danh mục thành công");
-    nav("/categories");
-  };
+  const { TextArea } = Input
+  const nav = useNavigate()
+  const [form] = Form.useForm()
+  const onFinish = async (values: ICategory) => {
+    await api.post('api/categories/', values)
+    console.log('Category:', values)
+    message.success('Thêm danh mục thành công!')
+    nav('/categories')
+  }
 
   return (
     <>
@@ -42,9 +30,28 @@ const AddCategory = () => {
             { min: 3, message: 'Ít nhất 3 ký tự' }
           ]}
         >
-          <Input placeholder="VD: Tâm lý học" />
+          <Input placeholder="VD: Tiểu thuyết" />
         </Form.Item>
-
+        <Form.Item
+          label="Tên đường dẫn"
+          name="slug"
+          rules={[
+            { required: true, message: 'Vui lòng nhập tên đường dẫn' },
+            { min: 3, message: 'Ít nhất 3 ký tự' }
+          ]}
+        >
+          <Input placeholder="VD: tieu-thuyet"/>
+        </Form.Item>
+        <Form.Item
+          label="Trạng thái"
+          name="status"
+          initialValue="active"
+        >
+          <Select>
+            <Select.Option value="active">Mở</Select.Option>
+            <Select.Option value="inactive">Khoá</Select.Option>
+          </Select>
+        </Form.Item>
         <Form.Item
           label="Mô tả"
           name="description"
@@ -54,27 +61,6 @@ const AddCategory = () => {
           ]}
         >
           <TextArea rows={3} placeholder="Mô tả hiển thị" />
-        </Form.Item>
-
-        <Form.Item
-          label="Hình ảnh"
-          name="image_url"
-          rules={[
-            { required: true, message: 'Vui lòng tải lên hình ảnh'},
-          ]}
-        >
-          <Input placeholder='URL hình ảnh hiển thị'/>
-        </Form.Item>
-
-        <Form.Item
-          label="Trạng thái"
-          name="status"
-          initialValue="ON"
-        >
-          <Select>
-            <Select.Option value="ON">Mở</Select.Option>
-            <Select.Option value="OFF">Khoá</Select.Option>
-          </Select>
         </Form.Item>
 
         <Form.Item>
@@ -87,4 +73,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default AddCategory
