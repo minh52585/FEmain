@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { setStateDrawer } from '@/redux/slices/app.slices'
+import { useAppDispatch, useAppSelector } from '@/pages/store/redux/hooks'
+import { setStateDrawer } from '@/pages/store/redux/slices/app.slices'
 import ThemeSelect from '@/theme/theme.select'
 import { LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Button, Dropdown, MenuProps, Space, theme } from 'antd'
