@@ -50,6 +50,7 @@ const Category = () => {
         dataSource={Array.isArray(data) ? data : []}
         columns={columns}
         rowKey={record => record._id}
+        pagination={{ pageSize: 5 }}
       />
     </>
   )

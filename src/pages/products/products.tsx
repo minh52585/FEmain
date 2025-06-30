@@ -47,7 +47,7 @@ const ProductsPage = () => {
           <Button icon={<PlusOutlined />} size="small" style={{ backgroundColor: "white", color: "dodgerblue", borderColor: "dodgerblue" }}></Button>
         </Link>
       </div>
-      <Table dataSource={Array.isArray(data) ? data : []} columns={columns} rowKey={record => record._id} pagination={{ pageSize: 10}} />
+      <Table dataSource={Array.isArray(data) ? data : []} columns={columns} rowKey={record => record._id} pagination={{ pageSize: 2}} />
     </>
   )
 }

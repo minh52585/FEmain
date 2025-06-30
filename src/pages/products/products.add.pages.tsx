@@ -68,9 +68,16 @@ const ProductsAdd = () => {
             { required: true, message: 'Vui lòng chọn danh mục sản phẩm' }
           ]}>
             <Select placeholder="-- Chọn --">
-              <Select.Option value="Lãng mạn">Lãng mạn</Select.Option>
-              <Select.Option value="Trinh thám">Trinh thám</Select.Option>
               <Select.Option value="Tiểu thuyết">Tiểu thuyết</Select.Option>
+              <Select.Option value="Ngôn tình">Ngôn tình</Select.Option>
+              <Select.Option value="Trinh thám">Trinh thám</Select.Option>
+              <Select.Option value="Huyền Bí">Huyền Bí</Select.Option>
+              <Select.Option value="Light Novel">Light Novel</Select.Option>
+              <Select.Option value="Truyện tranh">Truyện tranh</Select.Option>
+              <Select.Option value="Tác phẩm kinh điển">Tác phẩm kinh điển</Select.Option>
+              <Select.Option value="Du ký">Du ký</Select.Option>
+              <Select.Option value="Phóng sự">Phóng sự</Select.Option>
+              <Select.Option value="Hài hước">Hài hước</Select.Option>
             </Select>
           </Form.Item>
         </Col>
@@ -97,8 +104,8 @@ const ProductsAdd = () => {
 
       <Form.Item label="Trạng thái" name='status' initialValue="Sẵn">
         <Select>
-          <Select.Option value="available">Sẵn</Select.Option>
-          <Select.Option value="out of stock">Hết</Select.Option>
+          <Select.Option value="Sẵn">Sẵn</Select.Option>
+          <Select.Option value="Hết">Hết</Select.Option>
         </Select>
       </Form.Item>
 

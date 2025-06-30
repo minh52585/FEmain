@@ -40,7 +40,7 @@ export const getProductColumns = (queryClient: any, DelProduct: (id: string) => 
     key: 'imageUrl',
     render: (record: IProducts) => (
       <img
-        src={record.imageUrl || record.images}
+        src={record.imageUrl || record.imageUrl}
         alt="product"
         width={50}
         height={50}
@@ -55,14 +55,14 @@ export const getProductColumns = (queryClient: any, DelProduct: (id: string) => 
     key: 'status',
     render: (status: string, record: IProducts) => (
       <Switch
-        checked={status === 'available'}
+        checked={status === 'Sẵn'}
         checkedChildren="Sẵn"
         unCheckedChildren="Hết"
         style={{ minWidth: 50 }}
         onChange={async (checked) => {
           try {
             await api.put(`api/products/${record._id}`, {
-              status: checked ? 'available' : 'out of stock'
+              status: checked ? 'Sẵn' : 'Hết'
             });
             message.success('Cập nhật trạng thái thành công!');
             queryClient.invalidateQueries({ queryKey: ['products'] });
