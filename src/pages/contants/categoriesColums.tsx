@@ -1,5 +1,5 @@
 import api from '@/config/axios.customize';
-import { ICategory } from '@/types/category';
+import { ICategory } from '@/types/categories';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Space, Popconfirm, Button, Switch, message } from 'antd';
 import { Link } from 'react-router';

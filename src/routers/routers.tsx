@@ -7,7 +7,7 @@ import Analytics from '@/pages/analytics/analytics'
 import ProductsAdd from '@/pages/products/products.add.pages'
 import ProductsPage from '@/pages/products/products'
 import ProductsUpdate from '@/pages/products/products.update.pages'
-import Variants from '@/pages/variants/variants'
+import Variants from '@/pages/variants/variantsAdd'
 import Discounts from '@/pages/discounts/discounts'
 import DiscountsAdd from '@/pages/discounts/discounts.add.pages'
 import DiscountsUpdate from '@/pages/discounts/discounts.update.pages'
@@ -19,6 +19,9 @@ import Reviews from '@/pages/reviews/reviews'
 import Register from '@/pages/register/register'
 import Login from '@/pages/login/login'
 import NotFound from '@/pages/NotFound'
+import AddVariant from '@/pages/variants/variantsAdd'
+import VariantsList from '@/pages/variants/variants'
+import UpdateVariant from '@/pages/variants/variantsUpdate'
 
 
 
@@ -35,7 +38,9 @@ const Routers = () => {
           <Route path='/products/add' element={<ProductsAdd />} />
           <Route path='/products' element={<ProductsPage />} />
           <Route path='/products/update/:id' element={<ProductsUpdate />} />
-          <Route path='/variants' element={<Variants />} />
+          <Route path='/variants' element={<VariantsList />} />
+          <Route path='/variants/add' element={<AddVariant />} />
+          <Route path='/variants/:id/edit' element={<UpdateVariant />} />
           <Route path='/discounts' element={<Discounts />} />
           <Route path='/discounts/add' element={<DiscountsAdd />} />
           <Route path='/discounts/update/:id' element={<DiscountsUpdate />} />
