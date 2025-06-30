@@ -1,8 +1,8 @@
 import { Button, message, Popconfirm, Space, Switch } from 'antd'
 import { Link } from 'react-router'
-import { IDiscounts } from '../../../types/discounts.ts'
 import api from '@/config/axios.customize.ts'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { IDiscounts } from '@/types/discounts'
 
 export const getDiscountsColumns = (queryClient: any, Del: (id: string) => void) => [
   {

@@ -120,8 +120,8 @@ const ProductsUpdate = () => {
 
           <Form.Item label="Trạng thái" name='status' initialValue="Sẵn">
             <Select>
-              <Select.Option value="Sẵn">Sẵn</Select.Option>
-              <Select.Option value="Hết">Hết</Select.Option>
+              <Select.Option value="available">Sẵn</Select.Option>
+              <Select.Option value="out of stock">Hết</Select.Option>
             </Select>
           </Form.Item>
 

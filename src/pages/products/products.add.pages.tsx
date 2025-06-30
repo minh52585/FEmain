@@ -53,112 +53,112 @@ const ProductsAdd = () => {
 
   return (
     <>
-    <Form form={form} onFinish={onFinish} {...formItemLayout} layout='vertical' style={{ maxWidth: 800, margin: '0 auto' }}>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item label="Tên" name='name' rules={[
-            { required: true, message: 'Vui lòng nhập tên sản phẩm' },
-            { min: 3, message: 'Tên sản phẩm chứa ít nhất 3 ký tự' }
-          ]}>
-            <Input placeholder="VD: Đắc nhân tâm"/>
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Danh mục" name='category' rules={[
-            { required: true, message: 'Vui lòng chọn danh mục sản phẩm' }
-          ]}>
-            <Select placeholder="-- Chọn --">
-              <Select.Option value="Lãng mạn">Lãng mạn</Select.Option>
-              <Select.Option value="Trinh thám">Trinh thám</Select.Option>
-              <Select.Option value="Tiểu thuyết">Tiểu thuyết</Select.Option>
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row>
+      <Form form={form} onFinish={onFinish} {...formItemLayout} layout='vertical' style={{ maxWidth: 800, margin: '0 auto' }}>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Tên" name='name' rules={[
+              { required: true, message: 'Vui lòng nhập tên sản phẩm' },
+              { min: 3, message: 'Tên sản phẩm chứa ít nhất 3 ký tự' }
+            ]}>
+              <Input placeholder="VD: Đắc nhân tâm"/>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Danh mục" name='category' rules={[
+              { required: true, message: 'Vui lòng chọn danh mục sản phẩm' }
+            ]}>
+              <Select placeholder="-- Chọn --">
+                <Select.Option value="Lãng mạn">Lãng mạn</Select.Option>
+                <Select.Option value="Trinh thám">Trinh thám</Select.Option>
+                <Select.Option value="Tiểu thuyết">Tiểu thuyết</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
 
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item label="Giá tiền" name='price' rules={[
-            { required: true, message: 'Vui lòng nhập giá tiền' },
-            { type: 'number', message: 'Giá sản phẩm phải là số' },
-          ]}>
-            <InputNumber placeholder="VD: 50000" style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Số lượng" name='stock' rules={[
-            { required: true, message: 'Vui lòng nhập số lượng trong kho' },
-            { type: 'number', message: 'Số lượng phải là số' }
-          ]}>
-            <InputNumber placeholder="VD: 50" style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-      </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Giá tiền" name='price' rules={[
+              { required: true, message: 'Vui lòng nhập giá tiền' },
+              { type: 'number', message: 'Giá sản phẩm phải là số' },
+            ]}>
+              <InputNumber placeholder="VD: 50000" style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Số lượng" name='stock' rules={[
+              { required: true, message: 'Vui lòng nhập số lượng trong kho' },
+              { type: 'number', message: 'Số lượng phải là số' }
+            ]}>
+              <InputNumber placeholder="VD: 50" style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+        </Row>
 
-      <Form.Item label="Trạng thái" name='status' initialValue="Sẵn">
-        <Select>
-          <Select.Option value="available">Sẵn</Select.Option>
-          <Select.Option value="out of stock">Hết</Select.Option>
-        </Select>
-      </Form.Item>
-
-      <div style={{ display: 'flex', alignItems: 'start', gap: 20 }}>
-        <Form.Item label="Ảnh">
-  <Upload
-    listType="picture-card"
-    showUploadList={false}
-    beforeUpload={(file) => {
-      const isImage = file.type.startsWith('image/')
-      if (!isImage) {
-        message.error('Chỉ được tải lên hình ảnh!')
-      }
-      return isImage || Upload.LIST_IGNORE
-    }}
-    customRequest={({ file, onSuccess }) => {
-      if (file instanceof File) {
-        uploadImage(file)
-      }
-      setTimeout(() => onSuccess?.("ok"), 0)
-    }}
-  >
-    {loading ? (
-      <div>
-        <LoadingOutlined />
-        <div style={{ marginTop: 8 }}>Đang tải...</div>
-      </div>
-    ) : image ? (
-      <img
-        src={image}
-        alt="Uploaded"
-        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
-      />
-    ) : (
-      <div>
-        <PlusOutlined />
-        <div style={{ marginTop: 8 }}>Tải ảnh</div>
-      </div>
-    )}
-  </Upload>
-</Form.Item>
-
-<Form.Item name="imageUrl" style={{ display: 'none' }}>
-  <Input type="hidden" />
-</Form.Item>
-
-        <Form.Item label="Mô tả" name='description' style={{ flex: 1, marginBottom: 0 }} rules={[
-          { required: true, message: 'Vui lòng nhập mô tả' },
-          { min: 10, message: 'Mô tả chứa ít nhất 10 ký tự' }
-        ]}>
-          <TextArea rows={4} placeholder="Mô tả hiển thị" />
+        <Form.Item label="Trạng thái" name='status' initialValue="Sẵn">
+          <Select>
+            <Select.Option value="available">Sẵn</Select.Option>
+            <Select.Option value="out of stock">Hết</Select.Option>
+          </Select>
         </Form.Item>
-      </div>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit" block>
-          Xác nhận
-        </Button>
-      </Form.Item>
-    </Form>
+        <div style={{ display: 'flex', alignItems: 'start', gap: 20 }}>
+          <Form.Item label="Ảnh">
+            <Upload
+              listType="picture-card"
+              showUploadList={false}
+              beforeUpload={(file) => {
+                const isImage = file.type.startsWith('image/')
+                if (!isImage) {
+                  message.error('Chỉ được tải lên hình ảnh!')
+                }
+                return isImage || Upload.LIST_IGNORE
+              }}
+              customRequest={({ file, onSuccess }) => {
+                if (file instanceof File) {
+                  uploadImage(file)
+                }
+                setTimeout(() => onSuccess?.("ok"), 0)
+              }}
+            >
+              {loading ? (
+                <div>
+                  <LoadingOutlined />
+                  <div style={{ marginTop: 8 }}>Đang tải...</div>
+                </div>
+              ) : image ? (
+                <img
+                  src={image}
+                  alt="Uploaded"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
+                />
+              ) : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Tải ảnh</div>
+                </div>
+              )}
+            </Upload>
+          </Form.Item>
+
+          <Form.Item name="imageUrl" style={{ display: 'none' }}>
+            <Input type="hidden" />
+          </Form.Item>
+
+          <Form.Item label="Mô tả" name='description' style={{ flex: 1, marginBottom: 0 }} rules={[
+            { required: true, message: 'Vui lòng nhập mô tả' },
+            { min: 10, message: 'Mô tả chứa ít nhất 10 ký tự' }
+          ]}>
+            <TextArea rows={4} placeholder="Mô tả hiển thị" />
+          </Form.Item>
+        </div>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Xác nhận
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   )
 }
