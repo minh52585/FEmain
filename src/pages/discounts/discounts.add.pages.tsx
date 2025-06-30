@@ -1,30 +1,13 @@
 import api from '@/config/axios.customize';
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  message,
-  Select
-} from 'antd'
+import { Button, Col, DatePicker, Form, Input, message, Row, Select } from 'antd'
 import { IDiscounts } from '../../types/discounts.ts'
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router'
 
 const DiscountsAdd = () => {
   const nav = useNavigate()
   const { RangePicker } = DatePicker
-
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 6 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 14 }
-    }
-  }
   const [form] = Form.useForm()
+
   const onFinish = async (values: IDiscounts) => {
     try {
       const payload = {
@@ -33,84 +16,91 @@ const DiscountsAdd = () => {
           ? values.date.map((d: any) => d.toISOString())
           : values.date
       }
-      await api.post('api/discounts/add', payload)
-      message.success('Add discount successfully')
+      const res = await api.post('api/discounts/add', payload)
+      console.log(res);
+
+      message.success('Thêm khuyến mại thành công!')
       nav('/discounts')
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.message) {
         if (
           error.response.data.message.toLowerCase().includes('đã tồn tại') ||
-        error.response.data.message.toLowerCase().includes('duplicate')
+          error.response.data.message.toLowerCase().includes('duplicate')
         ) {
-          message.error('San pham da ton tai')
+          message.error('Mã khuyến mãi đã tồn tại!')
         } else {
           message.error(error.response.data.message)
         }
         console.log('Lỗi thêm khuyến mãi:', error.response.data.message)
       } else {
-        message.error('Add discounts failed')
+        message.error('Thêm khuyến mại thất bại!')
         console.log(error)
       }
     }
   }
+
   return (
     <Form
-      {...formItemLayout}
       form={form}
-      style={{ maxWidth: 600 }}
+      layout="vertical"
+      style={{ maxWidth: 800, margin: '0 auto' }}
       onFinish={onFinish}
     >
-      <Form.Item label="Product1" name="product" rules={[{ required: true, message: 'Please input!' }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item label="Product2" name="productID" rules={[{ required: true, message: 'Please input!' }]}>
-        <Input />
-      </Form.Item>
-
+      {/* ✅ Thêm mã khuyến mãi */}
       <Form.Item
-        label="Variant"
-        name="variantID"
-        rules={[{ required: true, message: 'Please input!' }]}
-      >
-        <Input/>
-      </Form.Item>
-      <Form.Item
-        label="Ma code"
+        label="Mã khuyến mãi"
         name="code"
-        rules={[{ required: true, message: 'Please input!' }]}
+        rules={[{ required: true, message: 'Vui lòng nhập mã khuyến mãi' }]}
       >
-        <Input/>
-      </Form.Item>
-      <Form.Item label="Khuyen mai" name='discount_type' rules={[{ required:true, message:'Vui long nhap khuyen mai' }]}>
-        <Select>
-          <Select.Option value="%">%</Select.Option>
-          <Select.Option value="vnd">Vnd</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Gia tri"
-        name="discount_value"
-        rules={[{ required: true, message: 'Please input!' }]}
-      >
-        <Input/>
-      </Form.Item>
-      <Form.Item label="Trang thai" name='status' rules={[{ required:true, message:'Vui long nhap trang thai' }]}>
-        <Select>
-          <Select.Option value="active">active</Select.Option>
-          <Select.Option value="inactive">inactive</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Date"
-        name="date"
-        rules={[{ required: true, message: 'Please input!' }]}
-      >
-        <RangePicker/>
+        <Input placeholder="VD: KM2025" />
       </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Mã sản phẩm" name="productID" rules={[{ required: true, message: 'Vui lòng chọn mã sản phẩm' }]}>
+            <Input placeholder="VD: 101" />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Mã biến thể" name="variantID" rules={[{ required: true, message: 'Vui lòng chọn mã biến thể' }]}>
+            <Input placeholder="VD: 1001" />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Phân loại" name='discount_type' rules={[{ required: true, message: 'Vui lòng chọn phân loại' }]}>
+            <Select placeholder="-- Chọn --">
+              <Select.Option value="%">Phần trăm</Select.Option>
+              <Select.Option value="vnd">Tiền mặt</Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label="Giá trị"
+            name="discount_value"
+            rules={[{ required: true, message: 'Vui lòng nhập giá trị' }]}>
+            <Input placeholder="VD: 15 hoặc 100000" />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item label="Trạng thái" name='status' rules={[{ required: true, message: 'Vui lòng chọn trạng thái' }]}>
+        <Select placeholder="-- Chọn --">
+          <Select.Option value="active">Mở</Select.Option>
+          <Select.Option value="inactive">Khoá</Select.Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item label="Thời gian áp dụng" name="date" rules={[{ required: true, message: 'Chọn thời gian áp dụng' }]}>
+        <RangePicker style={{ width: '100%' }} />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit" block>
+          Xác nhận
         </Button>
       </Form.Item>
     </Form>

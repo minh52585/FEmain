@@ -3,21 +3,24 @@ import PrivateRouters from './private.routers'
 import AdminLayout from '@/pages/AdminLayout'
 import Dashboard from '@/pages/dashboard/dashboard'
 import Users from '@/pages/users/users'
-import Variants from '@/pages/variants/variants'
-import Discounts from '@/pages/discounts/discounts'
-import Categories from '@/pages/categories/categories'
-import Orders from '@/pages/orders/orders'
-import Coupons from '@/pages/coupons/coupons'
-import Reviews from '@/pages/reviews/reviews'
-import NotFound from '@/pages/NotFound'
 import Analytics from '@/pages/analytics/analytics'
-import Register from '@/pages/register/register'
-import Login from '@/pages/login/login'
 import ProductsAdd from '@/pages/products/products.add.pages'
 import ProductsPage from '@/pages/products/products'
 import ProductsUpdate from '@/pages/products/products.update.pages'
+import Variants from '@/pages/variants/variants'
+import Discounts from '@/pages/discounts/discounts'
 import DiscountsAdd from '@/pages/discounts/discounts.add.pages'
 import DiscountsUpdate from '@/pages/discounts/discounts.update.pages'
+import Category from '@/pages/categories/categories'
+import AddCategory from '@/pages/categories/addCategories'
+import Orders from '@/pages/orders/orders'
+import Coupons from '@/pages/coupons/coupons'
+import Reviews from '@/pages/reviews/reviews'
+import Register from '@/pages/register/register'
+import Login from '@/pages/login/login'
+import NotFound from '@/pages/NotFound'
+
+
 
 const Routers = () => {
   const isAuthenticated = true
@@ -36,7 +39,8 @@ const Routers = () => {
           <Route path='/discounts' element={<Discounts />} />
           <Route path='/discounts/add' element={<DiscountsAdd />} />
           <Route path='/discounts/update/:id' element={<DiscountsUpdate />} />
-          <Route path='/categories' element={<Categories />} />
+          <Route path='/categories' element={<Category />} />
+          <Route path='/categories/add' element={<AddCategory />} />
           <Route path='/orders' element={<Orders />} />
           <Route path='/coupons' element={<Coupons />} />
           <Route path='/reviews' element={<Reviews />} />

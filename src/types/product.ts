@@ -3,8 +3,8 @@ export interface IProducts {
   name:string
   description:string
   price:number
-  quantity:number
+  stock:number
   category:string
-  images:string
+  imageUrl:string
   status:string
 }

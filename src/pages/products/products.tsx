@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, message, Popconfirm, Switch, Table } from 'antd'
+import { Button, message, Table } from 'antd'
 import { Link } from 'react-router'
 import { IProducts } from '../../types/product.ts'
-import axios from 'axios'
 import api from '@/config/axios.customize.ts'
+import { PlusOutlined } from '@ant-design/icons'
+import { getProductColumns } from '../contants/productColum.tsx'
 
 const ProductsPage = () => {
   const { data } = useQuery<IProducts[]>({
@@ -30,108 +31,24 @@ const ProductsPage = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
-      message.success('Delete product successfully')
+      message.success('Xoá sản phẩm thành công!')
     }
   })
   const DelProduct = (id: string) => {
     mutation.mutate(id)
   }
 
-  const columns = [
-    {
-      title: '#',
-      key: 'id',
-      render: (_: any, __: any, index: number) => index + 1
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name'
-    },
-    {
-      title: 'Description',
-      key: 'description',
-      render: (record: any) => record.description || record.descriptions || ''
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price'
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity'
-    },
-    {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category'
-    },
-    {
-      title: 'Images',
-      dataIndex: 'images',
-      key: 'images',
-      render: (images: string) => <img src={images} width={90} />,
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string, record: IProducts) => (
-        <Switch
-          checked={status === 'Còn hàng'}
-          checkedChildren="Còn hàng"
-          unCheckedChildren="Hết hàng"
-          style={{ minWidth: 100 }}
-          onChange={async (checked) => {
-            try {
-              await api.put(`api/products/${record._id}`, {
-                status: checked ? 'Còn hàng' : 'Hết hàng'
-              })
-              message.success('Cập nhật trạng thái thành công');
-              queryClient.invalidateQueries({ queryKey: ['products'] });
-            } catch (error) {
-              console.log(error)
-              message.error('Cập nhật trạng thái thất bại');
-            }
-          }}
-        />
-      )
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_: any, record: IProducts) =>
-        <>
-          <Popconfirm
-            title="Delete the product"
-            description="Are you sure to delete this product?"
-            okText="Yes"
-            cancelText="No"
-            onConfirm={() => DelProduct(record._id)}
-          >
-            <Button danger>Delete</Button>
-          </Popconfirm>
-          <Link to={`/products/update/${record._id}`}>
-            <Button type='primary' style={{ marginLeft: 8 }}>Edit</Button>
-          </Link>
-        </>
-    }
-  ]
+  const columns = getProductColumns(queryClient, DelProduct)
   return (
-    <div>
-      <Link to={'/products/add'}>
-        <div style={{ marginBottom: '20px' }}>
-          <Button type='primary'>Thêm</Button>
-        </div>
-      </Link>
-      <Table
-        dataSource={Array.isArray(data) ? data : []}
-        columns={columns}
-        rowKey={record => record._id}
-      />
-    </div>
+    <>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 11 }}>
+        <h1>Danh sách sản phẩm</h1>
+        <Link to={'/products/add'}>
+          <Button icon={<PlusOutlined />} size="small" style={{ backgroundColor: "white", color: "dodgerblue", borderColor: "dodgerblue" }}></Button>
+        </Link>
+      </div>
+      <Table dataSource={Array.isArray(data) ? data : []} columns={columns} rowKey={record => record._id} pagination={{ pageSize: 10}} />
+    </>
   )
 }
 
