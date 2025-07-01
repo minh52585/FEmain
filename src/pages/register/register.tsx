@@ -18,25 +18,42 @@ const Register = () => {
   }
 
   const onFinish = async (values: IRegister) => {
-    try {
-      await api.post('api/register', values)
-      message.success('Đăng ký thành công!')
-      const userData = {
-        ...values,
-        password: btoa(values.password)
+  try {
+    const [city, district] = values.address.split(',');
+    const formattedAddress = [
+      {
+        city: city?.trim(),
+        district: district?.trim(),
+        detail: "Chưa cập nhật", // hoặc bạn thêm 1 input nhập detail nếu muốn
+        default: true
       }
-      console.log(userData)
-      nav('/login')
-    } catch (error:any) {
-      if (error.response && error.response.data && error.response.data.message) {
-        message.error(error.response.data.message)
-        console.log('Lỗi đăng ký:', error.response.data.message)
-      } else {
-        message.error('Đăng ký thất bại!')
-        console.log(error)
-      }
+    ];
+
+    const payload = {
+      ...values,
+      address: formattedAddress
+    };
+
+    await api.post('api/register', payload);
+    message.success('Đăng ký thành công!');
+
+    const userData = {
+      ...payload,
+      password: btoa(values.password)
+    };
+    console.log(userData);
+    nav('/login');
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      message.error(error.response.data.message);
+      console.log('Lỗi đăng ký:', error.response.data.message);
+    } else {
+      message.error('Đăng ký thất bại!');
+      console.log(error);
     }
   }
+};
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select style={{ width: 70 }}>

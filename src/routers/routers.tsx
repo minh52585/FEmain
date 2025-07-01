@@ -7,7 +7,6 @@ import Analytics from '@/pages/analytics/analytics'
 import ProductsAdd from '@/pages/products/products.add.pages'
 import ProductsPage from '@/pages/products/products'
 import ProductsUpdate from '@/pages/products/products.update.pages'
-import Variants from '@/pages/variants/variantsAdd'
 import Discounts from '@/pages/discounts/discounts'
 import DiscountsAdd from '@/pages/discounts/discounts.add.pages'
 import DiscountsUpdate from '@/pages/discounts/discounts.update.pages'
@@ -22,6 +21,8 @@ import NotFound from '@/pages/NotFound'
 import AddVariant from '@/pages/variants/variantsAdd'
 import VariantsList from '@/pages/variants/variants'
 import UpdateVariant from '@/pages/variants/variantsUpdate'
+import OrderList from '@/pages/orders/orders'
+import OrderDetailPage from '@/pages/orders/orderDetail'
 
 
 
@@ -42,6 +43,8 @@ const Routers = () => {
           <Route path='/variants/add' element={<AddVariant />} />
           <Route path='/variants/:id/edit' element={<UpdateVariant />} />
           <Route path='/discounts' element={<Discounts />} />
+          <Route path='/orders' element={<OrderList />} />
+          <Route path='/orders/:orderId' element={<OrderDetailPage />} />
           <Route path='/discounts/add' element={<DiscountsAdd />} />
           <Route path='/discounts/update/:id' element={<DiscountsUpdate />} />
           <Route path='/categories' element={<Category />} />
