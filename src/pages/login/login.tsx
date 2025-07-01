@@ -16,27 +16,41 @@ const Login = () => {
     }
   }
 
-  const onFinish = async (values: ILogin) => {
-    try {
-      await api.post('api/login', values)
-      message.success('Đăng nhập thành công!')
-      const userData = {
-        ...values,
-        password: btoa(values.password)
-      }
-      localStorage.setItem('user', JSON.stringify(userData))
-      console.log(userData);
-      nav('/')
-    } catch (error:any) {
-      if (error.response && error.response.data && error.response.data.message) {
-        message.error(error.response.data.message)
-        console.log('Lỗi đăng nhập:', error.response.data.message)
-      } else {
-        message.error('Đăng nhập thất bại!')
-        console.log(error)
-      }
+ const onFinish = async (values: ILogin) => {
+  try {
+    const res = await api.post('api/login', values);
+
+    // Lấy token từ response
+    const token = res.data.token; 
+
+    if (token) {
+      localStorage.setItem('token', token); // Lưu token vào localStorage
+    } else {
+      message.error('Không nhận được token từ server');
+      return;
+    }
+
+    message.success('Đăng nhập thành công!');
+
+    // Lưu user (nếu cần)
+    const userData = res.data.user || null;
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(userData));
+    }
+    
+
+    nav('/');
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      message.error(error.response.data.message);
+      console.log('Lỗi đăng nhập:', error.response.data.message);
+    } else {
+      message.error('Đăng nhập thất bại!');
+      console.log(error);
     }
   }
+};
+
 
   return (
     <div

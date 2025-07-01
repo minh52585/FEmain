@@ -1,4 +1,4 @@
-import { Table, Button, Space, Popconfirm, message, Image } from 'antd';
+import { Table, Button, Space, Popconfirm, message } from 'antd';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/config/axios.customize';
 import { IVariant } from '@/types/variants';
