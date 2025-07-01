@@ -11,7 +11,7 @@ import {
   Tag,
 } from 'antd';
 import instance from '@/config/axios.customize';
-import { IOrder, IOrderItem, IVariantsMini } from '@/types/order';
+import { IOrder, IOrderItem } from '@/types/order';
 import {
   getPaymentMethodLabel,
   getPaymentStatusLabel,
@@ -127,6 +127,10 @@ const OrderDetailPage = () => {
           </Tag>
         </Descriptions.Item>
         <Descriptions.Item label="Hình thức vận chuyển">{getShippingMethodLabel(order.shippingMethod)}</Descriptions.Item>
+        <Descriptions.Item label="Lý do hủy / hoàn tiền">
+          {order.statusReason?.trim() ? order.statusReason : 'Không có'}
+        </Descriptions.Item>
+
         <Descriptions.Item label="Hình thức thanh toán">
           {getPaymentMethodLabel(order.paymentMethod)}
         </Descriptions.Item>

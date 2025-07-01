@@ -45,6 +45,7 @@ export interface IOrder {
   shippingMethod: string
   paymentMethod:string
   status:string
+  statusReason: string
   paymentStatus: string
   note?: string;
   items: IOrderItem[];
