@@ -25,10 +25,22 @@ const { Title } = Typography;
 const formatCurrency = (value?: number) =>
   typeof value === 'number' ? `${value.toLocaleString()} ₫` : 'N/A';
 
-const formatFullAddress = (address: IOrder['address'], note?: string) => {
-  const full = `${address.detail}, ${address.district}, ${address.city}`;
-  return note ? `${full} (${note})` : full;
+const formatFullAddress = (
+  address?: IOrder['address'],
+  note?: string
+): string => {
+  if (!address || typeof address !== 'object') return 'Không có địa chỉ';
+
+  const detail = (address as any)?.detail ?? '';
+  const district = (address as any)?.district ?? '';
+  const city = (address as any)?.city ?? '';
+
+  const full = [detail, district, city].filter(Boolean).join(', ');
+  
+  return full ? (note ? `${full} (${note})` : full) : 'Không có địa chỉ';
 };
+
+
 
 const OrderDetailPage = () => {
   const { orderId } = useParams();
@@ -38,45 +50,42 @@ const OrderDetailPage = () => {
     queryKey: ['order-detail', orderId],
     queryFn: async () => {
       const res = await instance.get(`/api/orders/${orderId}`);
-      console.log(res);
-      
       return res.data;
     },
     enabled: !!orderId,
   });
-
   if (isLoading) return <Spin size="large" />;
-  if (!order) return <div>Không tìm thấy đơn hàng</div>;
+if (!order) return <div>Không tìm thấy đơn hàng</div>;
+
+console.log('Địa chỉ trả về từ API:', order.address); // ✅ chỉ gọi khi order tồn tại
+
 
   const columns = [
     {
       title: 'Tên sản phẩm',
-      dataIndex: ['product_id','name'],
       key: 'name',
+      render: (_: any, record: IOrderItem) =>
+        record?.product_id?.name || 'Không có tên sản phẩm',
     },
-  {
-  title: 'Ảnh',
-  key: 'image',
-  render: (_: any, record: IOrderItem) => (
-    <Image
-      src={record.product_id?.image || '/placeholder.svg'}
-      width={60}
-      height={60}
-      alt="product"
-      crossOrigin="anonymous"
-    />
-  ),
-},
-
-  {
-    title: 'Phiên bản',
-    key: 'format',
-    render: (_: any, record: IOrderItem) => record.variant_id?.format || '—',
-  },
-
-
-
-
+    {
+      title: 'Ảnh',
+      key: 'image',
+      render: (_: any, record: IOrderItem) => (
+        <Image
+          src={record?.product_id?.image || '/placeholder.svg'}
+          width={60}
+          height={60}
+          alt="product"
+          crossOrigin="anonymous"
+        />
+      ),
+    },
+    {
+      title: 'Phiên bản',
+      key: 'format',
+      render: (_: any, record: IOrderItem) =>
+        record?.variant_id?.format || '—',
+    },
     {
       title: 'Giá',
       dataIndex: 'price',
@@ -119,18 +128,19 @@ const OrderDetailPage = () => {
         <Descriptions.Item label="Tên người dùng">{user?.fullname || 'N/A'}</Descriptions.Item>
         <Descriptions.Item label="Email">{user?.email || 'N/A'}</Descriptions.Item>
         <Descriptions.Item label="Địa chỉ giao hàng" span={2}>
-          {formatFullAddress(order.address, order.addressNote)}
-        </Descriptions.Item>
+  {formatFullAddress(order.address, order.addressNote)}
+</Descriptions.Item>
         <Descriptions.Item label="Trạng thái đơn">
           <Tag color={getStatusTagColor(order.status)}>
             {ORDER_STATUS.find((s) => s.key === order.status)?.label || order.status}
           </Tag>
         </Descriptions.Item>
-        <Descriptions.Item label="Hình thức vận chuyển">{getShippingMethodLabel(order.shippingMethod)}</Descriptions.Item>
+        <Descriptions.Item label="Hình thức vận chuyển">
+          {getShippingMethodLabel(order.shippingMethod)}
+        </Descriptions.Item>
         <Descriptions.Item label="Lý do hủy / hoàn tiền">
           {order.statusReason?.trim() ? order.statusReason : 'Không có'}
         </Descriptions.Item>
-
         <Descriptions.Item label="Hình thức thanh toán">
           {getPaymentMethodLabel(order.paymentMethod)}
         </Descriptions.Item>
@@ -147,7 +157,16 @@ const OrderDetailPage = () => {
 
       <Divider />
       <Title level={4}>Sản phẩm trong đơn hàng</Title>
-      <Table dataSource={order.items} rowKey="product_id" columns={columns} pagination={false} />
+      <Table
+        dataSource={order.items}
+        rowKey={(record) =>
+          typeof record.product_id === 'object'
+            ? record.product_id?._id || Math.random().toString()
+            : String(record.product_id || Math.random())
+        }
+        columns={columns}
+        pagination={false}
+      />
     </div>
   );
 };

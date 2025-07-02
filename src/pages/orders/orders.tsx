@@ -84,18 +84,23 @@ const OrderList = () => {
         </div>
       ),
     },
+    
     {
       title: 'Mã đơn hàng',
       dataIndex: '_id',
       key: 'orderId',
     },
     {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      key: 'address',
-      render: (address: IOrder['address']) =>
-        `${address.detail}, ${address.district}, ${address.city}`,
-    },
+  title: 'Địa chỉ',
+  dataIndex: 'address',
+  key: 'address',
+  render: (address: IOrder['address']) => {
+    if (!address) return <Text type="secondary">Chưa có địa chỉ</Text>;
+    const { detail, district, city } = address;
+    return [detail, district, city].filter(Boolean).join(', ');
+  },
+},
+
     {
       title: 'Phí ship',
       dataIndex: 'shippingFee',
