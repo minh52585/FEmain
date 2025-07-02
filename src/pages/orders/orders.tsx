@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Table,
   Tag,
@@ -78,9 +77,15 @@ const OrderList = () => {
       key: 'user',
       render: (_: any, record: IOrder) => (
         <div>
-          <Text strong>{record.user_id?.fullname}</Text>
-          <br />
-          <Text type="secondary">{record.user_id?.email}</Text>
+          {typeof record.user_id === 'object' ? (
+            <>
+              <Text strong>{record.user_id.fullname}</Text>
+              <br />
+              <Text type="secondary">{record.user_id.email}</Text>
+            </>
+          ) : (
+            <Text type="secondary">Không có thông tin người dùng</Text>
+          )}
         </div>
       ),
     },
@@ -105,13 +110,13 @@ const OrderList = () => {
       title: 'Phí ship',
       dataIndex: 'shippingFee',
       key: 'shippingFee',
-      render: (value: number) => value.toLocaleString('vi-VN') + ' ₫',
+      render: (value: number) => value.toLocaleString('vi-VN'),
     },
     {
       title: 'Tổng tiền',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
-      render: (value: number) => value.toLocaleString('vi-VN') + ' ₫',
+      render: (value: number) => value.toLocaleString('vi-VN'),
     },
     {
       title: 'Ngày đặt',
@@ -181,7 +186,7 @@ const OrderList = () => {
       rowKey="_id"
       dataSource={data}
       columns={columns}
-      pagination={{ pageSize: 5 }}
+      pagination={{ pageSize: 3 }}
     />
   );
 };

@@ -57,8 +57,7 @@ const OrderDetailPage = () => {
   if (isLoading) return <Spin size="large" />;
 if (!order) return <div>Không tìm thấy đơn hàng</div>;
 
-console.log('Địa chỉ trả về từ API:', order.address); // ✅ chỉ gọi khi order tồn tại
-
+console.log('Địa chỉ trả về từ API:', order.address);
 
   const columns = [
     {

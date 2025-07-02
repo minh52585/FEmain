@@ -14,7 +14,7 @@ export interface IOrderItem {
 export interface IProductsMini{
   _id:string
   name:string
-  imageUrl:string
+  image:string
 }
 
 

@@ -81,5 +81,3 @@ export const getPaymentStatusLabel = (status: string) => {
       return status
   }
 }
-
-
